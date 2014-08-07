@@ -1,6 +1,6 @@
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-Version, version, __version__, VERSION = ('0.4.1',) * 4
+Version, version, __version__, VERSION = ('0.4.2',) * 4
 
 from text.sentiment import political, posneg
 from text.sentiment import posneg as sentiment

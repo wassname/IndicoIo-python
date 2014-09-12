@@ -95,13 +95,14 @@ def image_preprocess(image):
         image = np.asarray(image)
     if type(image).__module__ != np.__name__:
         raise ValueError('Image was not of type numpy.ndarray or list.')
-    if image.max() > 1:
+    if str(image.dtype) in ['int64','uint8']:
         image = image/255.
     if len(image.shape) == 2:
         image = np.dstack((image,image,image))
     if len(image.shape) == 4:
         image = image[:,:,:3]
-
+    print image
+    print image.dtype,image.min(),image.max()
     image = resize(image,(64,64))
     image = image.tolist()
     return image

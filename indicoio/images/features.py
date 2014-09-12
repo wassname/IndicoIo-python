@@ -31,8 +31,11 @@ def facial_features(image):
     
     data_dict = json.dumps({"face": image})
     response = requests.post("http://api.indico.io/facialfeatures", data=data_dict, headers=JSON_HEADERS)
-    response_dict = json.loads(response.content)
-    return response_dict['response']
+    response_dict = response.json()
+    if 'response' not in response_dict:
+      raise ValueError(response_dict.values()[0])
+    else:
+      return response_dict['response']
 
 def image_features(image):
     """
@@ -67,5 +70,8 @@ def image_features(image):
     image = image_preprocess(image)
     data_dict = json.dumps({"image": image})
     response = requests.post("http://api.indico.io/imagefeatures", data=data_dict, headers=JSON_HEADERS)
-    response_dict = json.loads(response.content)
-    return response_dict['Features']
+    response_dict = response.json()
+    if 'Features' not in response_dict:
+      raise ValueError(response_dict.values()[0])
+    else:
+      return response_dict['Features']

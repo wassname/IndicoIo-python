@@ -93,6 +93,8 @@ def image_preprocess(image):
     """
     if isinstance(image,list):
         image = np.asarray(image)
+    if type(image).__module__ != np.__name__:
+        raise ValueError('Image was not of type numpy.ndarray or list.')
     if image.max() > 1:
         image = image/255.
     if len(image.shape) == 2:

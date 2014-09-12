@@ -1,5 +1,6 @@
 import inspect
 import numpy as np
+from skimage.transform import resize
 
 class TypeCheck(object):
     """
@@ -84,3 +85,21 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
     if dict_array:
         return dict(zip(keys, norm_array))
     return norm_array
+
+def image_preprocess(image):
+    """
+    Takes an image and prepares it for sending to the api including 
+    resizing and image data/structure standardizing.
+    """
+    if isinstance(image,list):
+        image = np.asarray(image)
+    if image.max() > 1:
+        image = image/255.
+    if len(image.shape) == 2:
+        image = np.dstack((image,image,image))
+    if len(image.shape) == 4:
+        image = image[:,:,:3]
+
+    image = resize(image,(64,64))
+    image = image.tolist()
+    return image

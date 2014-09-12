@@ -101,8 +101,6 @@ def image_preprocess(image):
         image = np.dstack((image,image,image))
     if len(image.shape) == 4:
         image = image[:,:,:3]
-    print image
-    print image.dtype,image.min(),image.max()
     image = resize(image,(64,64))
     image = image.tolist()
     return image

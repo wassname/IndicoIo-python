@@ -1,7 +1,7 @@
 indicoio-python
 ===============
 
-A wrapper for a series of APIs made by Indico Data Solutions.
+A wrapper for a series of APIs made by indico.
 
 Check out the main site on:
 

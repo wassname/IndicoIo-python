@@ -32,13 +32,17 @@ def political(text):
 
     data_dict = json.dumps({'text': text})
     response = requests.post("http://api.indico.io/political", data=data_dict, headers=JSON_HEADERS)
-    return json.loads(response.content)
+    response_dict = response.json()
+    if len(response_dict) < 2:
+      raise ValueError(response_dict.values()[0])
+    else:
+      return response_dict
 
 def posneg(text):
     """
     Given input text, returns a scalar estimate of the sentiment of that text.
     Values are roughly in the range 0 to 1 with 0.5 indicating neutral sentiment.
-    Likewise, 0 would suggest very negative sentiment and 1 would suggest very positive sentiment.
+    For reference, 0 suggests very negative sentiment and 1 suggests very positive sentiment.
 
     Example usage:
 
@@ -48,13 +52,17 @@ def posneg(text):
        >>> text = 'Thanks everyone for the birthday wishes!! It was a crazy few days ><'
        >>> sentiment = sentiment(text)
        >>> sentiment
-       {u'Sentiment': 0.6946439339979863}
+       0.6946439339979863
 
     :param text: The text to be analyzed.
     :type text: str or unicode
-    :rtype: Dictionary containing Sentiment key with a float value
+    :rtype: Float
     """
     
     data_dict = json.dumps({'text': text})
     response = requests.post("http://api.indico.io/sentiment", data=data_dict, headers=JSON_HEADERS)
-    return json.loads(response.content)
+    response_dict = response.json()
+    if 'Sentiment' not in response_dict:
+      raise ValueError(response_dict.values()[0])
+    else:
+      return response_dict['Sentiment']

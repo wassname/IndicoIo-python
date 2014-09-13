@@ -30,4 +30,8 @@ def fer(image):
     
     data_dict = json.dumps({"face": image})
     response = requests.post("http://api.indico.io/fer", data=data_dict, headers=JSON_HEADERS)
-    return json.loads(response.content)
+    response_dict = response.json()
+    if len(response_dict) < 2:
+      raise ValueError(response_dict.values()[0])
+    else:
+      return response_dict

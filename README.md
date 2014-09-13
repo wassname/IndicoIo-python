@@ -1,11 +1,15 @@
 indicoio-python
 ===============
 
-A wrapper for a series of APIs made by Indico Data Solutions.
+A wrapper for a series of APIs made by indico.
 
 Check out the main site on:
 
 http://indico.io
+
+Check out our documentation on:
+
+http://indicoiopython.s3-website-us-west-2.amazonaws.com/indicoio.html
 
 Our APIs are totally free to use, and ready to be used in your application. No data or training required.
 
@@ -14,8 +18,9 @@ Current APIs
 
 Right now this wrapper supports the following apps:
 
-- Political Sentiment Analysis
 - Positive/Negative Sentiment Analysis
+- Political Sentiment Analysis
+- Image Feature Extraction
 - Facial Emotion Recognition
 - Facial Feature Extraction
 - Language Detection

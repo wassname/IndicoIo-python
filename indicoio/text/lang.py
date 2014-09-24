@@ -3,7 +3,7 @@ import json
 
 from indicoio import JSON_HEADERS
 
-def language(text):
+def language(api_root, text):
     """
     Given input text, returns a probability distribution over 33 possible 
     languages of what language the text was written in.
@@ -27,7 +27,7 @@ def language(text):
     """
     
     data_dict = json.dumps({'text': text})
-    response = requests.post("http://api.indico.io/language", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "language", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if len(response_dict) < 2:
       raise ValueError(response_dict.values()[0])

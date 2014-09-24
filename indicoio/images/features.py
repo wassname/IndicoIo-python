@@ -6,7 +6,7 @@ import numpy as np
 from indicoio import JSON_HEADERS
 from indicoio.utils import image_preprocess
 
-def facial_features(image):
+def facial_features(api_root, image):
     """
     Given an grayscale input image of a face, returns a 48 dimensional feature vector explaining that face.
     Useful as a form of feature engineering for face oriented tasks.
@@ -30,14 +30,14 @@ def facial_features(image):
     """
     
     data_dict = json.dumps({"face": image})
-    response = requests.post("http://api.indico.io/facialfeatures", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "facialfeatures", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if 'response' not in response_dict:
       raise ValueError(response_dict.values()[0])
     else:
       return response_dict['response']
 
-def image_features(image):
+def image_features(api_root, image):
     """
     Given an input image, returns a 2048 dimensional sparse feature vector explaining that image. 
     Useful as a form of feature engineering for image oriented tasks.
@@ -69,7 +69,7 @@ def image_features(image):
     """
     image = image_preprocess(image)
     data_dict = json.dumps({"image": image})
-    response = requests.post("http://api.indico.io/imagefeatures", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "imagefeatures", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if 'Features' not in response_dict:
       raise ValueError(response_dict.values()[0])

@@ -20,8 +20,7 @@ class FullAPIRun(unittest.TestCase):
         test_string = "Worst song ever."
         response = sentiment(test_string)
 
-        self.assertTrue(isinstance(response, dict))
-        self.assertEqual(posneg_set, set(response.keys()))
+        self.assertTrue(isinstance(response, float))
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])

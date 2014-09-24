@@ -4,7 +4,7 @@ import json
 from indicoio import JSON_HEADERS
 from indicoio.utils import normalize
 
-def political(text):
+def political(api_root, text):
     """
     Given input text, returns a probability distribution over the political alignment of the speaker.
 
@@ -31,14 +31,14 @@ def political(text):
     """
 
     data_dict = json.dumps({'text': text})
-    response = requests.post("http://api.indico.io/political", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "political", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if len(response_dict) < 2:
       raise ValueError(response_dict.values()[0])
     else:
       return response_dict
 
-def posneg(text):
+def posneg(api_root, text):
     """
     Given input text, returns a scalar estimate of the sentiment of that text.
     Values are roughly in the range 0 to 1 with 0.5 indicating neutral sentiment.
@@ -60,7 +60,7 @@ def posneg(text):
     """
     
     data_dict = json.dumps({'text': text})
-    response = requests.post("http://api.indico.io/sentiment", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "sentiment", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if 'Sentiment' not in response_dict:
       raise ValueError(response_dict.values()[0])

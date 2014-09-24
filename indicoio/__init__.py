@@ -3,7 +3,7 @@ from utils import config
 
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-Version, version, __version__, VERSION = ('0.4.4',) * 4
+Version, version, __version__, VERSION = ('0.4.5',) * 4
 
 from text.sentiment import political, posneg
 from text.sentiment import posneg as sentiment
@@ -14,6 +14,7 @@ from images.features import image_features
 
 political = partial(political, config.api_root)
 sentiment = partial(sentiment, config.api_root)
+posneg = partial(sentiment, config.api_root)
 language = partial(language, config.api_root)
 fer = partial(fer, config.api_root)
 facial_features = partial(facial_features, config.api_root)

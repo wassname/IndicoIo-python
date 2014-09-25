@@ -4,7 +4,7 @@ import requests
 import numpy as np
 from indicoio import JSON_HEADERS
 
-def fer(image):
+def fer(api_root, image):
     """
     Given a grayscale input image of a face, returns a probability distribution over emotional state.
     Input should be in a list of list format, resizing will be attempted internally but for best 
@@ -29,7 +29,7 @@ def fer(image):
     """
     
     data_dict = json.dumps({"face": image})
-    response = requests.post("http://api.indico.io/fer", data=data_dict, headers=JSON_HEADERS)
+    response = requests.post(api_root + "fer", data=data_dict, headers=JSON_HEADERS)
     response_dict = response.json()
     if len(response_dict) < 2:
       raise ValueError(response_dict.values()[0])

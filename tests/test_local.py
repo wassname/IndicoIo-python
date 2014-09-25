@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from indicoio import political, sentiment, fer, facial_features, language
+from indicoio.local import political, sentiment, fer, facial_features, language
 
 
 class FullAPIRun(unittest.TestCase):
@@ -20,8 +20,7 @@ class FullAPIRun(unittest.TestCase):
         test_string = "Worst song ever."
         response = sentiment(test_string)
 
-        self.assertTrue(isinstance(response, dict))
-        self.assertEqual(posneg_set, set(response.keys()))
+        self.assertTrue(isinstance(response, float))
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])

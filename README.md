@@ -63,3 +63,5 @@ Installation
 ```
 pip install indicoio
 ```
+
+Announcement: Indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.

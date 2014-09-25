@@ -9,3 +9,4 @@ v0.4.0, Fri Aug 1 -- Changed api import to lowercase, added language example
 v0.4.1, Fri Aug 1 -- Updated __version__ variable to be accurate
 v0.4.2, Wed Aug 6 -- Updated README to accurately reflect political analysis results
 v0.4.3, Thu Sep 11 -- Added image features api and sphinx compliant documentation
+v0.4.4, Thu Sep 25 -- Added dependencies installation to setup.py

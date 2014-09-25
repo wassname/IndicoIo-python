@@ -11,6 +11,7 @@ from indicoio.images.features import facial_features
 from indicoio.images.features import image_features
 
 political = partial(political, config.local_api_root)
+posneg = partial(posneg, config.local_api_root)
 sentiment = partial(sentiment, config.local_api_root)
 posneg = partial(sentiment, config.local_api_root)
 language = partial(language, config.local_api_root)

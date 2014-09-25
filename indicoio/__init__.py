@@ -13,6 +13,7 @@ from images.features import facial_features
 from images.features import image_features
 
 political = partial(political, config.api_root)
+posneg = partial(posneg, config.api_root)
 sentiment = partial(sentiment, config.api_root)
 posneg = partial(sentiment, config.api_root)
 language = partial(language, config.api_root)

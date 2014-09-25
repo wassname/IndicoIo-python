@@ -60,7 +60,7 @@ Examples
 
 Local
 --------
-When using a local version of the api you must remember to import '.local', otherwise it functions the exact same as the remote api documented above.
+When using a local version of the api you must remember to import '.local', otherwise it functions the exact same as the remote api documented above. Local API versions are not yet available at this point in time.
 
 ```
 >>> from indicoio.local import sentiment
@@ -70,7 +70,6 @@ When using a local version of the api you must remember to import '.local', othe
 {u'Sentiment': 0.9547717584012009}
 
 ```
-
 
 Installation
 ------------

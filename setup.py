@@ -14,6 +14,7 @@ setup(
         "indicoio.text",
         "indicoio.images",
         "indicoio.utils",
+        "indicoio.local",
         "tests",
     ],
     description="""

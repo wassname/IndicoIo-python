@@ -2,7 +2,7 @@ import json
 
 import requests
 import numpy as np
-from indicoio import JSON_HEADERS
+from indicoio.utils import api_handler
 
 def fer(api_root, image):
     """
@@ -28,10 +28,4 @@ def fer(api_root, image):
     :rtype: Dictionary containing emotion probability pairs
     """
     
-    data_dict = json.dumps({"face": image})
-    response = requests.post(api_root + "fer", data=data_dict, headers=JSON_HEADERS)
-    response_dict = response.json()
-    if len(response_dict) < 2:
-      raise ValueError(response_dict.values()[0])
-    else:
-      return response_dict
+    return api_handler(image, api_root + "fer")

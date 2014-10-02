@@ -1,6 +1,17 @@
-import inspect
+import inspect, json, requests
 import numpy as np
 from skimage.transform import resize
+
+from indicoio import JSON_HEADERS
+
+def api_handler(arg, url):
+    data_dict = json.dumps({'data': arg})
+    response = requests.post(url, data=data_dict, headers=JSON_HEADERS).json()
+    results = response.get('results', False)
+    if not results:
+        error = response.get('error')
+        raise ValueError(error)
+    return results
 
 class TypeCheck(object):
     """

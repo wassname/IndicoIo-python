@@ -16,11 +16,11 @@ class FullAPIRun(unittest.TestCase):
         self.assertEqual(political_set, set(response.keys()))
 
     def test_posneg(self):
-        posneg_set = set(['Sentiment'])
         test_string = "Worst song ever."
         response = sentiment(test_string)
 
         self.assertTrue(isinstance(response, float))
+        self.assertTrue(response < 0.5)
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])

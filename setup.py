@@ -34,6 +34,6 @@ setup(
         "requests >= 1.2.3",
         "six >= 1.3.0",
         "numpy >= 1.8.1",
-        "scikit-image >= 0.10.1"
+        "scikit-image >= 0.10.1",
     ],
 )

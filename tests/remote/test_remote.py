@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from indicoio import political, sentiment, fer, facial_features, language
+from indicoio import political, sentiment, fer, facial_features, language, image_features
 
 
 class FullAPIRun(unittest.TestCase):
@@ -44,6 +44,13 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
+    
+    def test_good_image_features(self):
+        test_image = np.linspace(0,1,64*64*3).reshape(64,64,3).tolist()
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
 
     def test_language(self):
         language_set = set([

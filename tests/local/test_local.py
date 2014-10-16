@@ -24,7 +24,7 @@ class FullAPIRun(unittest.TestCase):
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
-        test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
+        test_face = np.random.rand(48,48).tolist()
         response = fer(test_face)
 
         self.assertTrue(isinstance(response, dict))
@@ -32,21 +32,28 @@ class FullAPIRun(unittest.TestCase):
 
     def test_bad_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
-        test_face = np.linspace(0,50,56*56).reshape(56,56).tolist()
+        test_face = np.random.rand(56,56).tolist()
         response = fer(test_face)
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
 
     def test_good_facial_features(self):
-        test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
+        test_face = np.random.rand(48,48).tolist()
         response = facial_features(test_face)
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
+    
+    def test_good_image_features_greyscale(self):
+        test_image = np.random.rand(64, 64).tolist()
+        response = image_features(test_image)
 
-    def test_good_image_features(self):
-        test_image = np.linspace(0,1,64*64*3).reshape(64,64,3).tolist()
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+
+    def test_good_image_features_rgb(self):
+        test_image = np.random.rand(64, 64, 3).tolist()
         response = image_features(test_image)
 
         self.assertTrue(isinstance(response, list))

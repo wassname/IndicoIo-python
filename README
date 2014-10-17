@@ -55,7 +55,12 @@ Examples
 
 >>> sorted(language_dict.keys(), key=lambda x: language_dict[x], reverse=True)
 [u'Latin', u'Dutch', u'Greek', u'Portuguese', u'Spanish', u'Chinese', u'Lithuanian', u'Korean', u'Finnish', u'Persian (Farsi)', u'Hungarian', u'Danish', u'Norwegian', u'Japanese', u'Tagalog', u'Turkish', u'Swedish', u'Vietnamese', u'Russian', u'Esperanto', u'French', u'Arabic', u'English', u'German', u'Czech', u'Polish', u'Slovak', u'Thai', u'Bulgarian', u'Hebrew', u'Romanian', u'Italian', u'Indonesian']
+```
 
+If you have a local indico server running, simply import from `indicoio.local`.
+
+```
+>>> from indicoio.local import political, sentiment, fer, facial_features, language
 ```
 
 Installation

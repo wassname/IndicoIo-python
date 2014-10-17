@@ -1,16 +1,16 @@
 from functools import partial
-from utils import config
+import indicoio.config as config 
 
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 Version, version, __version__, VERSION = ('0.4.5',) * 4
 
-from text.sentiment import political, posneg
-from text.sentiment import posneg as sentiment
-from text.lang import language
-from images.fer import fer
-from images.features import facial_features
-from images.features import image_features
+from indicoio.text.sentiment import political, posneg
+from indicoio.text.sentiment import posneg as sentiment
+from indicoio.text.lang import language
+from indicoio.images.fer import fer
+from indicoio.images.features import facial_features
+from indicoio.images.features import image_features
 
 political = partial(political, config.api_root)
 posneg = partial(posneg, config.api_root)

@@ -1,7 +1,7 @@
 import requests
 import json
 
-from indicoio import JSON_HEADERS
+from indicoio.utils import api_handler
 
 def language(api_root, text):
     """
@@ -26,10 +26,4 @@ def language(api_root, text):
     :rtype: Dictionary of language probability pairs
     """
     
-    data_dict = json.dumps({'text': text})
-    response = requests.post(api_root + "language", data=data_dict, headers=JSON_HEADERS)
-    response_dict = response.json()
-    if len(response_dict) < 2:
-      raise ValueError(response_dict.values()[0])
-    else:
-      return response_dict
+    return api_handler(text, api_root + "language")

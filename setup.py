@@ -8,12 +8,13 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.4.4',
+    version='0.4.6',
     packages=[
         "indicoio",
         "indicoio.text",
         "indicoio.images",
         "indicoio.utils",
+        "indicoio.local",
         "tests",
     ],
     description="""
@@ -33,6 +34,6 @@ setup(
         "requests >= 1.2.3",
         "six >= 1.3.0",
         "numpy >= 1.8.1",
-        "scikit-image >= 0.10.1"
+        "scikit-image >= 0.10.1",
     ],
 )

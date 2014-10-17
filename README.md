@@ -60,7 +60,7 @@ Examples
 
 Local
 --------
-When using a local version of the api you must remember to import '.local', otherwise it functions the exact same as the remote api documented above.
+When using a local version of the api you must remember to import '.local', otherwise it functions the exact same as the remote api documented above. Local API versions are not yet available at this point in time.
 
 ```
 >>> from indicoio.local import sentiment
@@ -71,11 +71,10 @@ When using a local version of the api you must remember to import '.local', othe
 
 ```
 
-
 Installation
 ------------
 ```
 pip install indicoio
 ```
 
-Announcement: Indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.
+Announcement: indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.

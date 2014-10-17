@@ -1,5 +1,5 @@
 from functools import partial
-from indicoio.utils import config
+import indicoio.config as config
 
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 

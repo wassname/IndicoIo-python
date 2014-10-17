@@ -11,3 +11,4 @@ v0.4.2, Wed Aug 6 -- Updated README to accurately reflect political analysis res
 v0.4.3, Thu Sep 11 -- Added image features api and sphinx compliant documentation
 v0.4.4, Thu Sep 25 -- Added dependencies installation to setup.py
 v0.4.5, Thu Sep 25 -- Added interface to local indico server
+v0.4.6, Fri Oct 27 -- Updated to point to new indico api servers, cleaner REST API

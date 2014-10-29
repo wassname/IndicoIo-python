@@ -4,8 +4,21 @@ import numpy as np
 
 from indicoio.local import political, sentiment, fer, facial_features, language, image_features
 
+DIR = os.path.dirname(os.path.realpath(__file__))
+
 
 class FullAPIRun(unittest.TestCase):
+
+    def load_image(self, relpath, as_grey=False):
+        image_path = os.path.normpath(os.path.join(DIR, relpath))
+        image = skimage.io.imread(image_path, as_grey=True).tolist()
+        return image
+
+    def check_range(self, list, minimum=0.9, maximum=0.1, span=0.5):
+        vector = np.asarray(list)
+        self.assertTrue(vector.max() > maximum)
+        self.assertTrue(vector.min() < minimum)
+        self.assertTrue(np.ptp(vector) > span)
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])
@@ -41,6 +54,18 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
 
+    def test_happy_fer(self):
+        test_face = self.load_image("../data/happy.png", as_grey=True)
+        response = fer(test_face)
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(response['Happy'] > 0.5)
+
+    def test_fear_fer(self):
+        test_face = self.load_image("../data/fear.png", as_grey=True)
+        response = fer(test_face)
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(response['Fear'] > 0.25)
+
     def test_bad_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
         test_face = np.random.rand(56,56).tolist()
@@ -55,6 +80,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
+        self.check_range(response)
     
     def test_good_image_features_greyscale(self):
         test_image = np.random.rand(64, 64).tolist()
@@ -62,6 +88,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 2048)
+        self.check_range(response)
 
     def test_good_image_features_rgb(self):
         test_image = np.random.rand(64, 64, 3).tolist()
@@ -69,6 +96,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 2048)
+        self.check_range(response)
 
     def test_language(self):
         language_set = set([

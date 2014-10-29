@@ -16,6 +16,12 @@ class FullAPIRun(unittest.TestCase):
         image = skimage.io.imread(image_path, as_grey=True).tolist()
         return image
 
+    def check_range(self, list, minimum=0.9, maximum=0.1, span=0.5):
+        vector = np.asarray(list)
+        self.assertTrue(vector.max() > maximum)
+        self.assertTrue(vector.min() < minimum)
+        self.assertTrue(np.ptp(vector) > span)
+
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])
         test_string = "Guns don't kill people, people kill people."
@@ -76,9 +82,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
-        self.assertTrue(np.asarray(response).max() > 0.1)
-        self.assertTrue(np.asarray(response).min() < 0.9)
-        self.assertTrue(np.ptp(np.asarray(response)) > 0.5)
+        self.check_range(response)
     
     def test_good_image_features_greyscale(self):
         test_image = np.random.rand(64, 64).tolist()
@@ -86,8 +90,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 2048)
-        self.assertTrue(np.asarray(response).max() > 0.1)
-        self.assertTrue(np.asarray(response).min() < 0.9)
+        self.check_range(response)
 
     def test_good_image_features_rgb(self):
         test_image = np.random.rand(64, 64, 3).tolist()
@@ -95,9 +98,7 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 2048)
-        self.assertTrue(np.asarray(response).max() > 0.1)
-        self.assertTrue(np.asarray(response).min() < 0.9)
-        self.assertTrue(np.ptp(np.asarray(response)) > 0.5)
+        self.check_range(response)
 
     def test_language(self):
         language_set = set([

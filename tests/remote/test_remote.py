@@ -15,12 +15,23 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(political_set, set(response.keys()))
 
+        test_string = "Save the whales"
+        response = political(test_string)
+
+        self.assertTrue(isinstance(response, dict))
+        assert response['Green'] > 0.5
+
     def test_posneg(self):
         test_string = "Worst song ever."
         response = sentiment(test_string)
 
         self.assertTrue(isinstance(response, float))
         self.assertTrue(response < 0.5)
+
+        test_string = "Best song ever."
+        response = sentiment(test_string)
+        self.assertTrue(isinstance(response, float))
+        self.assertTrue(response > 0.5)
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
@@ -98,6 +109,7 @@ class FullAPIRun(unittest.TestCase):
         ])
         language_dict = language('clearly an english sentence')
         self.assertEqual(language_set, set(language_dict.keys()))
+        assert language_dict['English'] > 0.25
 
 
 if __name__ == "__main__":

@@ -25,6 +25,16 @@ Right now this wrapper supports the following apps:
 - Facial Feature Extraction
 - Language Detection
 
+
+Installation
+------------
+```
+pip install indicoio
+```
+
+Announcement: indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.
+
+
 Examples
 --------
 ```
@@ -70,11 +80,3 @@ When using a local version of the api you must remember to import '.local', othe
 {u'Sentiment': 0.9547717584012009}
 
 ```
-
-Installation
-------------
-```
-pip install indicoio
-```
-
-Announcement: indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.

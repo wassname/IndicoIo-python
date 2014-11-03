@@ -4,7 +4,8 @@ import os
 import numpy as np
 import skimage.io
 
-from indicoio import political, sentiment, fer, facial_features, language, image_features
+from indicoio import political, sentiment, fer, facial_features, language, image_features, \
+                     classification, named_entities
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -21,6 +22,18 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(vector.max() > maximum)
         self.assertTrue(vector.min() < minimum)
         self.assertTrue(np.ptp(vector) > span)
+
+    def test_document_classification(self):
+        categories = set(['arts'])
+        text = "On Monday, president Barack Obama will be..."
+        results = classification(text)
+        self.assertTrue(categories < set(results.keys()))
+
+    def test_named_entity_recognition(self):
+        categories = set(['arts'])
+        text = "On Monday, president Barack Obama will be..."
+        results = named_entities(text)
+        self.assertTrue('named entity' in set(results.keys()))
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

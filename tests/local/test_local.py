@@ -20,6 +20,18 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(vector.min() < minimum)
         self.assertTrue(np.ptp(vector) > span)
 
+    def test_document_classification(self):
+        categories = set(['arts'])
+        text = "On Monday, president Barack Obama will be..."
+        results = classification(text)
+        self.assertTrue(categories < set(results.keys()))
+
+    def test_named_entity_recognition(self):
+        categories = set(['arts'])
+        text = "On Monday, president Barack Obama will be..."
+        results = named_entities(text)
+        self.assertTrue('named entity' in set(results.keys()))
+
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])
         test_string = "Guns don't kill people, people kill people."

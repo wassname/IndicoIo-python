@@ -7,7 +7,6 @@ from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment
 from indicoio.text.lang import language
 from indicoio.text.classification import classification
-from indicoio.text.ner import named_entities
 from indicoio.images.fer import fer
 from indicoio.images.features import facial_features
 from indicoio.images.features import image_features
@@ -21,4 +20,3 @@ fer = partial(fer, config.local_api_root)
 facial_features = partial(facial_features, config.local_api_root)
 image_features = partial(image_features, config.local_api_root)
 classification = partial(classification, config.local_api_root)
-named_entities = partial(named_entities, config.local_api_root)

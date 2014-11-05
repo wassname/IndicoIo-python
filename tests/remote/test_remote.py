@@ -4,8 +4,7 @@ import os
 import numpy as np
 import skimage.io
 
-from indicoio import political, sentiment, fer, facial_features, language, image_features, \
-                     classification, named_entities
+from indicoio import political, sentiment, fer, facial_features, language, image_features, classification
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -28,12 +27,6 @@ class FullAPIRun(unittest.TestCase):
         text = "On Monday, president Barack Obama will be..."
         results = classification(text)
         self.assertTrue(categories < set(results.keys()))
-
-    def test_named_entity_recognition(self):
-        categories = set(['arts'])
-        text = "On Monday, president Barack Obama will be..."
-        results = named_entities(text)
-        self.assertTrue('named entity' in set(results.keys()))
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

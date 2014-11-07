@@ -41,6 +41,9 @@ Examples
 >>> sentiment('Really enjoyed the movie.')
 {u'Sentiment': 0.8105182526856075}
 
+>>> text_tags("On Monday, president Barack Obama will be...")
+{u'fashion': 0.024739582352183764, u'art': 0.008637280256320275, u'energy': 0.013183388999943419, ...}
+
 >>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
 
 >>> fer(test_face)

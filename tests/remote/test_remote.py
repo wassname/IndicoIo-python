@@ -4,7 +4,7 @@ import os
 import numpy as np
 import skimage.io
 
-from indicoio import political, sentiment, fer, facial_features, language, image_features
+from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -21,6 +21,24 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(vector.max() > maximum)
         self.assertTrue(vector.min() < minimum)
         self.assertTrue(np.ptp(vector) > span)
+
+    def test_text_tags(self):
+        expected_keys = set(['fashion', 'art', 'energy', 'economics', 'entrepreneur', 
+                             'books', 'politics', 'gardening', 'nba', 'conservative', 
+                             'technology', 'startups', 'relationships', 'education',
+                             'humor', 'psychology', 'bicycling', 'investing', 'travel',
+                             'cooking', 'christianity', 'environment', 'religion', 'health', 
+                             'hockey', 'pets', 'music', 'soccer', 'guns', 'gaming', 'jobs',
+                             'business', 'nature', 'food', 'cars', 'photography', 'philosophy',
+                             'geek', 'sports', 'baseball', 'news', 'television', 'entertainment',
+                             'parenting', 'comics', 'science', 'nfl','programming',
+                             'personalfinance', 'atheism', 'movies', 'anime', 'fitness',
+                             'military', 'realestate', 'history'])
+        text = "On Monday, president Barack Obama will be..."
+        results = text_tags(text)
+        max_keys = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+        assert 'politics' in max_keys[:3]
+        self.assertFalse(set(results.keys()) - expected_keys)
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

@@ -1,6 +1,3 @@
-import requests
-import json
-
 from indicoio.utils import api_handler
 
 def language(api_root, text):

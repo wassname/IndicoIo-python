@@ -12,3 +12,4 @@ v0.4.3, Thu Sep 11 -- Added image features api and sphinx compliant documentatio
 v0.4.4, Thu Sep 25 -- Added dependencies installation to setup.py
 v0.4.5, Thu Sep 25 -- Added interface to local indico server
 v0.4.6, Fri Oct 27 -- Updated to point to new indico api servers, cleaner REST API
+v0.4.8, Fri Nov 7 -- Updated API interface to include new text tags API

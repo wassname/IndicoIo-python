@@ -1,6 +1,3 @@
-import requests
-import json
-
 from indicoio import JSON_HEADERS
 from indicoio.utils import api_handler
 

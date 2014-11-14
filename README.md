@@ -13,6 +13,10 @@ http://indicoiopython.s3-website-us-west-2.amazonaws.com/indicoio.html
 
 Our APIs are totally free to use, and ready to be used in your application. No data or training required.
 
+Update
+------------
+We now have [organized documentation](http://indico.readme.io/v1.0/docs)
+
 Current APIs
 ------------
 

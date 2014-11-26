@@ -4,8 +4,10 @@ from skimage.transform import resize
 
 from indicoio import JSON_HEADERS
 
-def api_handler(arg, url):
+def api_handler(arg, url, batch=False):
     data_dict = json.dumps({'data': arg})
+    if batch:
+        url += "/batch"
     response = requests.post(url, data=data_dict, headers=JSON_HEADERS).json()
     results = response.get('results', False)
     if not results:

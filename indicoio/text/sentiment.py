@@ -1,7 +1,7 @@
 from indicoio import JSON_HEADERS
 from indicoio.utils import api_handler
 
-def political(api_root, text):
+def political(api_root, text, batch=False):
     """
     Given input text, returns a probability distribution over the political alignment of the speaker.
 
@@ -27,9 +27,9 @@ def political(api_root, text):
     :rtype: Dictionary of party probability pairs
     """
 
-    return api_handler(text, api_root + "political")
+    return api_handler(text, api_root + "political", batch=batch)
 
-def posneg(api_root, text):
+def posneg(api_root, text, batch=False):
     """
     Given input text, returns a scalar estimate of the sentiment of that text.
     Values are roughly in the range 0 to 1 with 0.5 indicating neutral sentiment.
@@ -50,4 +50,4 @@ def posneg(api_root, text):
     :rtype: Float
     """
     
-    return api_handler(text, api_root + "sentiment")
+    return api_handler(text, api_root + "sentiment", batch=batch)

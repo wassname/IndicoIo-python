@@ -5,7 +5,7 @@ import numpy as np
 
 from indicoio.utils import image_preprocess, api_handler
 
-def facial_features(api_root, image, batch=False):
+def facial_features(api_root, image, batch=False, auth=None):
     """
     Given an grayscale input image of a face, returns a 48 dimensional feature vector explaining that face.
     Useful as a form of feature engineering for face oriented tasks.
@@ -27,9 +27,9 @@ def facial_features(api_root, image, batch=False):
     :type image: list of lists
     :rtype: List containing feature responses
     """
-    return api_handler(image, api_root + "facialfeatures", batch=batch)
+    return api_handler(image, api_root + "facialfeatures", batch=batch, auth=auth)
 
-def image_features(api_root, image, batch=False):
+def image_features(api_root, image, batch=False, auth=None):
     """
     Given an input image, returns a 2048 dimensional sparse feature vector explaining that image. 
     Useful as a form of feature engineering for image oriented tasks.
@@ -60,4 +60,4 @@ def image_features(api_root, image, batch=False):
     :rtype: List containing features
     """
     image = image_preprocess(image)
-    return api_handler(image, api_root + "imagefeatures", batch=batch)
+    return api_handler(image, api_root + "imagefeatures", batch=batch, auth=auth)

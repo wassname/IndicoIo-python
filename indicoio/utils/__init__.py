@@ -1,14 +1,31 @@
-import inspect, json, requests
+import inspect, json, getpass, os
+import requests
 import numpy as np
 from skimage.transform import resize
 
 from indicoio import JSON_HEADERS
 
-def api_handler(arg, url, batch=False):
+def auth_query():
+    email = os.environ.get("INDICO_EMAIL")
+    password = os.environ.get("INDICO_PASSWORD")
+
+    # store settings
+    if not email:
+        email = raw_input("Email: ")
+        os.environ["INDICO_EMAIL"] = email
+
+    if not password:
+        password = getpass.getpass("Password: ")
+        os.environ["INDICO_PASSWORD"] = password
+
+    return (email, password)
+
+def api_handler(arg, url, batch=False, auth=None):
     data_dict = json.dumps({'data': arg})
     if batch:
         url += "/batch"
-    response = requests.post(url, data=data_dict, headers=JSON_HEADERS).json()
+        auth = auth_query()
+    response = requests.post(url, data=data_dict, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)
     if not results:
         error = response.get('error')

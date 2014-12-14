@@ -30,6 +30,10 @@ setup(
         Slater Victoroff <slater@indicodatasolutions.com>,
         Aidan McLaughlin <aidan@indicodatasolutions.com>
     """,
+    setup_requires=[
+        "numpy >= 1.8.1",
+        "six >= 1.3.0",
+    ],
     install_requires=[
         "requests >= 1.2.3",
         "six >= 1.3.0",

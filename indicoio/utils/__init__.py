@@ -24,7 +24,8 @@ def api_handler(arg, url, batch=False, auth=None):
     data_dict = json.dumps({'data': arg})
     if batch:
         url += "/batch"
-        auth = auth_query()
+        if not auth:
+            auth = auth_query()
     response = requests.post(url, data=data_dict, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)
     if not results:

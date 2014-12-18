@@ -78,6 +78,14 @@ If you have a local indico server running, simply import from `indicoio.local`.
 >>> from indicoio.local import political, sentiment, fer, facial_features, language
 ```
 
+If you'd like to use our batch api interface, please send an email to contact@indico.io.
+
+```
+>>> from indicio import batch_sentiment
+batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
+```
+
+
 Installation
 ------------
 ```

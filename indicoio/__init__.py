@@ -16,10 +16,11 @@ from indicoio.images.features import image_features
 apis = ['political', 'posneg', 'sentiment', 'language', 'fer', 
         'facial_features', 'image_features', 'text_tags']
 apis = dict((api, globals().get(api)) for api in apis)
-local = {}
+class Namespace(object): pass
+local = Namespace()
 
 for api in apis:
 	globals()[api] = partial(apis[api], config.api_root)
 	globals()['batch_' + api] = partial(apis[api], config.api_root, batch=True)
-	local[api] = partial(apis[api], config.local_api_root)
-	local[api] = partial(apis[api], config.local_api_root, batch=True)
+	setattr(local, api, partial(apis[api], config.local_api_root))
+	setattr(local, 'batch_' + api, partial(apis[api], config.local_api_root, batch=True))

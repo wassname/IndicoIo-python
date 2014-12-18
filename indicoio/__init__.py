@@ -3,7 +3,7 @@ import indicoio.config as config
 
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-Version, version, __version__, VERSION = ('0.4.5',) * 4
+Version, version, __version__, VERSION = ('0.4.11',) * 4
 
 from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment

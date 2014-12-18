@@ -46,13 +46,18 @@ Examples
 >>> sentiment('Really enjoyed the movie.')
 {u'Sentiment': 0.8105182526856075}
 
->>> tag_dict = text_tags("Facebook blog posts about Android tech make better journalism than most news outlets.")
+>>> test_text = "Facebook blog posts about Android tech make better journalism than most news outlets."
 
->>> sorted(tag_dict.keys(), key=lambda x: tag_dict[x], reverse=True)[:5]
-[u'investing', u'startups', u'business', u'entrepreneur', u'humor']
+>>> tag_dict = text_tags(test_text)
 
->>> tag_dict
-{u'fashion': 0.011450126534350728, u'art': 0.00358698972755963, u'energy': 0.005537894035625527, ...}
+>>> sorted(tag_dict.keys(), key=lambda x: tag_dict[x], reverse=True)[:3]
+[u'startups_and_entrepreneurship', u'investment', u'business']
+
+>>> text_tags(test_text, threshold=0.1) # return only keys with value > 0.1
+{u'startups_and_entrepreneurship': 0.21888586688354486}
+
+>>> text_tags(test_text, top_n=1) # return only keys with top_n values
+{u'startups_and_entrepreneurship': 0.21888586688354486}
 
 >>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
 

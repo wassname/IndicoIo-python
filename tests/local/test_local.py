@@ -22,22 +22,15 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(np.ptp(vector) > span)
 
     def test_text_tags(self):
-        expected_keys = set(['fashion', 'art', 'energy', 'economics', 'entreprener', 
-                             'books', 'politics', 'gardening', 'nba', 'conservative', 
-                             'technology', 'startps', 'relationships', 'edcation',
-                             'hmor', 'psychology', 'bicycling', 'investing', 'travel',
-                             'cooking', 'christianity', 'environment', 'religion', 'health', 
-                             'hockey', 'pets', 'msic', 'soccer', 'gns', 'gaming', 'jobs',
-                             'bsiness', 'natre', 'food', 'cars', 'photography', 'philosophy',
-                             'geek', 'sports', 'baseball', 'news', 'television', 'entertainment',
-                             'parenting', 'comics', 'science', 'nfl','programming',
-                             'personalfinance', 'atheism', 'movies', 'anime', 'fitness',
-                             'military', 'realestate', 'history'])
         text = "On Monday, president Barack Obama will be..."
         results = text_tags(text)
         max_keys = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
-        assert 'politics' in max_keys[:3]
-        self.assertTrue(expected_keys == set(results.keys()))
+        assert 'political_discussion' in max_keys[:5]
+        results = text_tags(text, top_n=5)
+        assert len(results) is 5
+        results = text_tags(text, threshold=0.1)
+        for v in results.values():
+            assert v >= 0.1
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

@@ -4,7 +4,7 @@ import requests
 import numpy as np
 from indicoio.utils import api_handler
 
-def fer(api_root, image, batch=False, auth=None):
+def fer(api_root, image, batch=False, auth=None, **kwargs):
     """
     Given a grayscale input image of a face, returns a probability distribution over emotional state.
     Input should be in a list of list format, resizing will be attempted internally but for best 
@@ -28,4 +28,4 @@ def fer(api_root, image, batch=False, auth=None):
     :rtype: Dictionary containing emotion probability pairs
     """
     
-    return api_handler(image, api_root + "fer", batch=batch, auth=auth)
+    return api_handler(image, api_root + "fer", batch=batch, auth=auth, **kwargs)

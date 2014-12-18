@@ -42,10 +42,18 @@ Examples
 >>> sentiment('Really enjoyed the movie.')
 {u'Sentiment': 0.8105182526856075}
 
->>> tag_dict = text_tags("Facebook blog posts about Android tech make better journalism than most news outlets.")
+>>> test_text = "Facebook blog posts about Android tech make better journalism than most news outlets."
 
->>> sorted(tag_dict.keys(), key=lambda x: tag_dict[x], reverse=True)[:5]
-[u'investing', u'startups', u'business', u'entrepreneur', u'humor']
+>>> tag_dict = text_tags(test_text)
+
+>>> sorted(tag_dict.keys(), key=lambda x: tag_dict[x], reverse=True)[:3]
+[u'startups_and_entrepreneurship', u'investment', u'business']
+
+>>> text_tags(test_text, threshold=0.1) # return only keys with value > 0.1
+{u'startups_and_entrepreneurship': 0.21888586688354486}
+
+>>> text_tags(test_text, top_n=1) # return only keys with top_n values
+{u'startups_and_entrepreneurship': 0.21888586688354486}
 
 >>> tag_dict
 {u'fashion': 0.011450126534350728, u'art': 0.00358698972755963, u'energy': 0.005537894035625527, ...}
@@ -73,6 +81,14 @@ If you have a local indico server running, simply import from `indicoio.local`.
 ```
 >>> from indicoio.local import political, sentiment, fer, facial_features, language
 ```
+
+If you'd like to use our batch api interface, please send an email to contact@indico.io.
+
+```
+>>> from indicio import batch_sentiment
+batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
+```
+
 
 Installation
 ------------

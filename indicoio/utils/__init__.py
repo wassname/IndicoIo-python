@@ -20,15 +20,17 @@ def auth_query():
 
     return (email, password)
 
-def api_handler(arg, url, batch=False, auth=None):
-    data_dict = json.dumps({'data': arg})
+def api_handler(arg, url, batch=False, auth=None, **kwargs):
+    data = {'data': arg}
+    data.update(**kwargs)
+    json_data = json.dumps(data)
     if batch:
         url += "/batch"
         if not auth:
             auth = auth_query()
-    response = requests.post(url, data=data_dict, headers=JSON_HEADERS, auth=auth).json()
+    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)
-    if not results:
+    if results is False:
         error = response.get('error')
         raise ValueError(error)
     return results

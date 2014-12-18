@@ -27,6 +27,11 @@ class FullAPIRun(unittest.TestCase):
         results = text_tags(text)
         max_keys = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
         assert 'political_discussion' in max_keys[:5]
+        results = text_tags(text, top_n=5)
+        assert len(results) is 5
+        results = text_tags(text, threshold=0.1)
+        for v in results.values():
+            assert v >= 0.1
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

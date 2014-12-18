@@ -1,6 +1,6 @@
 from indicoio.utils import api_handler
 
-def text_tags(api_root, text, batch=False, auth=None):
+def text_tags(api_root, text, batch=False, auth=None, **kwargs):
     """
     Given input text, returns a probability distribution over 100 document categories
 
@@ -22,4 +22,4 @@ def text_tags(api_root, text, batch=False, auth=None):
     :rtype: Dictionary of class probability pairs
     """
     
-    return api_handler(text, api_root + "texttags", batch=batch, auth=None)
+    return api_handler(text, api_root + "texttags", batch=batch, auth=None, **kwargs)

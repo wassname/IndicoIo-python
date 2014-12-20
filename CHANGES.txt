@@ -13,6 +13,7 @@ v0.4.4, Thu Sep 25 -- Added dependencies installation to setup.py
 v0.4.5, Thu Sep 25 -- Added interface to local indico server
 v0.4.6, Fri Oct 27 -- Updated to point to new indico api servers, cleaner REST API
 v0.4.8, Fri Nov 7 -- Updated API interface to include new text tags API
-v0.4.11, Wed Dec 18 -- Updated tests for text tags
-v0.4.12, Thu Dec 19 -- Added batch support interface
-v0.4.13, Thu Dec 19 -- Added optional arguments to text tags API
+v0.4.11, Thu Dec 18 -- Updated tests for text tags
+v0.4.12, Fri Dec 19 -- Added batch support interface
+v0.4.13, Fri Dec 19 -- Added optional arguments to text tags API
+v0.4.14, Sat Dec 20 -- Fix for batch image features preprocessing, increased test coverage

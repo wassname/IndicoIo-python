@@ -28,7 +28,7 @@ def api_handler(arg, url, batch=False, auth=None, **kwargs):
         url += "/batch"
         # if not auth:
         #     auth = auth_query()
-    print auth
+        
     response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)
     if results is False:

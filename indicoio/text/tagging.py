@@ -22,4 +22,4 @@ def text_tags(api_root, text, batch=False, auth=None, **kwargs):
     :rtype: Dictionary of class probability pairs
     """
     
-    return api_handler(text, api_root + "texttags", batch=batch, auth=None, **kwargs)
+    return api_handler(text, api_root + "texttags", batch=batch, auth=auth, **kwargs)

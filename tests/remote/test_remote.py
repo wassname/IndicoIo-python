@@ -3,10 +3,39 @@ import os
 
 import numpy as np
 import skimage.io
+from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
+from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
+from indicoio import batch_language, batch_image_features, batch_text_tags
 
 DIR = os.path.dirname(os.path.realpath(__file__))
+
+class BatchAPIRun(unittest.TestCase):
+
+    def setUp(self):
+        self.username = os.getenv("INDICO_USERNAME")
+        self.password = os.getenv("INDICO_PASSWORD")
+        self.auth = (self.username, self.password)
+
+        if not self.username or not self.password:
+            raise SkipTest
+
+    def test_batch_texttags(self):
+        test_data = ["On Monday, president Barack Obama will be..."]
+        response = batch_text_tags(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+
+    def test_batch_posneg(self):
+        test_data = ['Worst song ever', 'Best song ever']
+        response = batch_sentiment(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(response[0] < 0.5)
+
+    def test_batch_political(self):
+        test_data = ["Guns don't kill people, people kill people."]
+        response = batch_political(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
 
 
 class FullAPIRun(unittest.TestCase):

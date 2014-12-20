@@ -17,3 +17,4 @@ v0.4.11, Thu Dec 18 -- Updated tests for text tags
 v0.4.12, Fri Dec 19 -- Added batch support interface
 v0.4.13, Fri Dec 19 -- Added optional arguments to text tags API
 v0.4.14, Sat Dec 20 -- Fix for batch image features preprocessing, increased test coverage
+v0.4.15, Sat Dec 20 -- Bug fix release

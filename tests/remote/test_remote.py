@@ -37,6 +37,39 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_political(test_data, auth=self.auth)
         self.assertTrue(isinstance(response, list))
 
+    def test_batch_fer(self):
+        test_data = [np.random.rand(48, 48).tolist()]
+        response = batch_fer(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_facial_features(self):
+        test_data = [np.random.rand(48, 48).tolist()]
+        response = batch_facial_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 48)
+    
+    def test_batch_image_features_greyscale(self):
+        test_data = [np.random.rand(64, 64).tolist()]
+        response = batch_image_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 2048)
+
+    def test_batch_image_features_rgb(self):
+        test_data = [np.random.rand(64, 64, 3).tolist()]
+        response = batch_image_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 2048)
+        
+    def test_batch_language(self):
+        test_data = ['clearly an english sentence']
+        response = batch_language(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(response[0]['English'] > 0.25)
+
 
 class FullAPIRun(unittest.TestCase):
 

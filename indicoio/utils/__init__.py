@@ -120,11 +120,13 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
         return dict(zip(keys, norm_array))
     return norm_array
 
-def image_preprocess(image):
+def image_preprocess(image, batch=False):
     """
     Takes an image and prepares it for sending to the api including 
     resizing and image data/structure standardizing.
     """
+    if batch:
+        return [image_preprocess(img, batch=False) for img in image]
     if isinstance(image,list):
         image = np.asarray(image)
     if type(image).__module__ != np.__name__:

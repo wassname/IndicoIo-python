@@ -59,5 +59,5 @@ def image_features(api_root, image, batch=False, auth=None, **kwargs):
     :type image: numpy.ndarray
     :rtype: List containing features
     """
-    image = image_preprocess(image)
+    image = image_preprocess(image, batch=batch)
     return api_handler(image, api_root + "imagefeatures", batch=batch, auth=auth, **kwargs)

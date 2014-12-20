@@ -26,8 +26,9 @@ def api_handler(arg, url, batch=False, auth=None, **kwargs):
     json_data = json.dumps(data)
     if batch:
         url += "/batch"
-        if not auth:
-            auth = auth_query()
+        # if not auth:
+        #     auth = auth_query()
+    print auth
     response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)
     if results is False:
@@ -119,11 +120,13 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
         return dict(zip(keys, norm_array))
     return norm_array
 
-def image_preprocess(image):
+def image_preprocess(image, batch=False):
     """
     Takes an image and prepares it for sending to the api including 
     resizing and image data/structure standardizing.
     """
+    if batch:
+        return [image_preprocess(img, batch=False) for img in image]
     if isinstance(image,list):
         image = np.asarray(image)
     if type(image).__module__ != np.__name__:

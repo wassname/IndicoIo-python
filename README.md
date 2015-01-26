@@ -7,10 +7,6 @@ Check out the main site on:
 
 http://indico.io
 
-Check out our documentation on:
-
-http://indicoiopython.s3-website-us-west-2.amazonaws.com/indicoio.html
-
 Our APIs are totally free to use, and ready to be used in your application. No data or training required.
 
 Documentation
@@ -96,5 +92,3 @@ Installation
 ```
 pip install indicoio
 ```
-
-Announcement: Indico has partnered with Experfy, a data science consulting marketplace based in the Harvard Innovation Lab.  Through Experfy, we are helping our data science community members find lucrative projects and advance their skills. Please signup for Experfy at https://www.experfy.com/ to get started.

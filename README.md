@@ -9,9 +9,16 @@ http://indico.io
 
 Our APIs are totally free to use, and ready to be used in your application. No data or training required.
 
+
+Installation
+------------
+```
+pip install indicoio
+```
+
 Documentation
 ------------
-Found [here](http://indico.readme.io/v1.0/docs)
+Available at [indico.reame.io](http://indico.readme.io/v1.0/docs)
 
 Current APIs
 ------------
@@ -79,16 +86,12 @@ If you have a local indico server running, simply import from `indicoio.local`.
 >>> from indicoio.local import political, sentiment, fer, facial_features, language
 ```
 
+Batch API Access
+----------------
+
 If you'd like to use our batch api interface, please send an email to contact@indico.io.
 
 ```
 >>> from indicio import batch_sentiment
 batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
-```
-
-
-Installation
-------------
-```
-pip install indicoio
 ```

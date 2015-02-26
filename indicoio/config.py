@@ -1,2 +1,3 @@
-local_api_root = "http://localhost:9438/"
-api_root = "http://apiv1.indico.io/"
+import os
+
+api_root = os.getenv("INDICO_PRIVATE_CLOUD_URL") or "http://apiv1.indico.io/"

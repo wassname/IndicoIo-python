@@ -1,5 +1,6 @@
 import unittest
 import os
+from requests import ConnectionError
 
 import numpy as np
 import skimage.io
@@ -49,7 +50,7 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 48)
-    
+
     def test_batch_image_features_greyscale(self):
         test_data = [np.random.rand(64, 64).tolist()]
         response = batch_image_features(test_data, auth=self.auth)
@@ -63,12 +64,20 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 2048)
-        
+
     def test_batch_language(self):
         test_data = ['clearly an english sentence']
         response = batch_language(test_data, auth=self.auth)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
+
+    def test_batch_set_url_root(self):
+        test_data = ['clearly an english sentence']
+        self.assertRaises(ConnectionError,
+                          batch_language,
+                          test_data,
+                          auth=self.auth,
+                          url_root='http://not.a.real.url/')
 
 
 class FullAPIRun(unittest.TestCase):
@@ -156,7 +165,7 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
         self.check_range(response)
-    
+
     def test_good_image_features_greyscale(self):
         test_image = np.random.rand(64, 64).tolist()
         response = image_features(test_image)
@@ -213,6 +222,13 @@ class FullAPIRun(unittest.TestCase):
         language_dict = language('clearly an english sentence')
         self.assertEqual(language_set, set(language_dict.keys()))
         assert language_dict['English'] > 0.25
+
+    def test_set_url_root(self):
+        test_data = 'clearly an english sentence'
+        self.assertRaises(ConnectionError,
+                          language,
+                          test_data,
+                          url_root='http://not.a.real.url/')
 
 
 if __name__ == "__main__":

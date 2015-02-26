@@ -120,7 +120,7 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
 
 def image_preprocess(image, batch=False):
     """
-    Takes an image and prepares it for sending to the api including 
+    Takes an image and prepares it for sending to the api including
     resizing and image data/structure standardizing.
     """
     if batch:

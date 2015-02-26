@@ -78,13 +78,6 @@ Examples
 >>> language_dict
 {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
 
-```
-
-If you have a local indico server running, simply import from `indicoio.local`.
-
-```
->>> from indicoio.local import political, sentiment, fer, facial_features, language
-```
 
 Batch API Access
 ----------------
@@ -94,4 +87,34 @@ If you'd like to use our batch api interface, please send an email to contact@in
 ```
 >>> from indicio import batch_sentiment
 batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
+```
+
+Authentication credentials can also be set as the environment variables "INDICO_USERNAME" and "INDICO_PASSWORD" or as 'username' and 'password' in indicorc
+
+Private Cloud API Access
+------------------------
+
+If you'd like to use our private cloud interface, please send an email to contact@indico.io.
+
+```
+>>> from indicio import sentiment
+sentiment("Text to analyze", hostname="http://exampleprivatecloud.io/", auth=("example@example.com", "********"))
+```
+
+Private cloud hostnames can also be set as the environment variable "INDICO_PRIVATE_CLOUD_URL" or as 'hostname' in indicorc
+
+indicorc
+------------------------
+
+Indicoio-python will look first for $HOME/.indicorc then ./.indicorc for the optional configuration file. The indicorc can be used to set an authentication username and password as well as the private cloud hostname, so they don't need to be specified for every call. All sectiions are optional.
+
+Here is an example of a valid indicorc file:
+
+```
+[auth]
+username = test@example.com
+password = secret
+
+[private_cloud]
+hostname = example.indico.io
 ```

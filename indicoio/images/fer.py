@@ -6,7 +6,7 @@ import numpy as np
 from indicoio.utils import api_handler
 import indicoio.config as config
 
-def fer(image, cloud=config.cloud, batch=False, auth=None, **kwargs):
+def fer(image, cloud=config.CLOUD, batch=False, auth=None, **kwargs):
     """
     Given a grayscale input image of a face, returns a probability distribution over emotional state.
     Input should be in a list of list format, resizing will be attempted internally but for best

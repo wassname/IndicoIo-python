@@ -12,8 +12,16 @@ from indicoio.images.fer import fer
 from indicoio.images.features import facial_features
 from indicoio.images.features import image_features
 
-apis = ['political', 'posneg', 'sentiment', 'language', 'fer',
-        'facial_features', 'image_features', 'text_tags']
+apis = [
+    'political',
+    'posneg',
+    'sentiment',
+    'language',
+    'fer',
+    'facial_features',
+    'image_features',
+    'text_tags'
+]
 apis = dict((api, globals().get(api)) for api in apis)
 
 for api in apis:

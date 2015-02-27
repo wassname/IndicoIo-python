@@ -1,7 +1,7 @@
 from indicoio.utils import api_handler
 import indicoio.config as config
 
-def text_tags(text, cloud=config.cloud, batch=False, auth=None, **kwargs):
+def text_tags(text, cloud=config.CLOUD, batch=False, auth=None, **kwargs):
     """
     Given input text, returns a probability distribution over 100 document categories
 

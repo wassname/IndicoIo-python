@@ -44,11 +44,11 @@ class Settings(ConfigParser.ConfigParser):
             os.getenv("INDICO_PASSWORD") or self.auth_settings.get('password')
         )
 
-settings = Settings(files=[
+SETTINGS = Settings(files=[
     os.path.expanduser("~/.indicorc"),
     os.path.join(os.getcwd(), '.indicorc')
 ])
 
-auth = settings.auth()
-cloud = settings.cloud()
-public_api_host = 'apiv1.indico.io'
+AUTH = SETTINGS.auth()
+CLOUD = SETTINGS.cloud()
+PUBLIC_API_HOST = 'apiv1.indico.io'

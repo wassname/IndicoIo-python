@@ -16,7 +16,7 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 class BatchAPIRun(unittest.TestCase):
 
     def setUp(self):
-        self.auth = config.auth
+        self.auth = config.AUTH
 
         if not all(self.auth):
             raise SkipTest

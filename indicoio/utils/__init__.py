@@ -13,15 +13,17 @@ def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
     json_data = json.dumps(data)
 
     if cloud:
-        host = "%s.indico.domains"
+        host = "%s.indico.domains" % cloud
     else: 
         # default to indico public cloud
-        host = config.public_api_host
+        host = config.PUBLIC_API_HOST
 
     url = "http://%s/%s" % (host, api)
-
     if batch:
         url += "/batch"
+
+    if not auth:
+        auth = config.AUTH
 
     response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
     results = response.get('results', False)

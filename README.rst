@@ -126,7 +126,7 @@ Examples
 
 Environment variables take precedence over any configuration found in
 the indicorc file. The following environment variables are valid: -
-:math:`INDICO_USERNAME  - `\ INDICO\_PASSWORD - $INDICO\_CLOUD
+$INDICO\_USERNAME - $INDICO\_PASSWORD - $INDICO\_CLOUD
 
 Finally, any values explicitly passed in to an api call will override
 configuration options set in the indicorc file or in an environment

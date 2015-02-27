@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.5.0',
+    version='0.5.1',
     packages=[
         "indicoio",
         "indicoio.text",
@@ -23,12 +23,28 @@ setup(
     license="MIT License (See LICENSE)",
     long_description=open("README.rst").read(),
     url="https://github.com/IndicoDataSolutions/indicoio-python",
-    author="Alec Radford, Slater Victoroff, Aidan McLaughlin",
+    author="Alec Radford, Slater Victoroff, Aidan McLaughlin, Anne Carlson",
     author_email="""
-        Alec Radford <alec@indicodatasolutions.com>,
-        Slater Victoroff <slater@indicodatasolutions.com>,
-        Aidan McLaughlin <aidan@indicodatasolutions.com>
+        Alec Radford <alec@indico.io>,
+        Slater Victoroff <slater@indico.io>,
+        Aidan McLaughlin <aidan@indico.io>,
+        Anne Carlson <annie@indico.io>
+
     """,
+    classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Image Recognition",
+        "Topic :: Scientific/Engineering :: Information Analysis",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
     setup_requires=[
         "numpy >= 1.8.1",
         "six >= 1.3.0",

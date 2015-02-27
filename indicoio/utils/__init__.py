@@ -25,10 +25,14 @@ def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
     if not auth:
         auth = config.AUTH
 
-    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
-    results = response.get('results', False)
+    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth)
+    if response.status_code == 503 and cloud != None:
+        raise Exception("Private cloud '%s' does not include api '%s'" % (cloud, api))
+
+    json_results = response.json()
+    results = json_results.get('results', False)
     if results is False:
-        error = response.get('error')
+        error = json_results.get('error')
         raise ValueError(error)
     return results
 

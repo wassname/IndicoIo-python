@@ -1,11 +1,82 @@
 import unittest
 import os
+from requests import ConnectionError
 
 import numpy as np
+import skimage.io
+from nose.plugins.skip import Skip, SkipTest
 
-from indicoio.local import political, sentiment, fer, facial_features, language, image_features, text_tags
+from indicoio import config
+from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
+from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
+from indicoio import batch_language, batch_image_features, batch_text_tags
 
 DIR = os.path.dirname(os.path.realpath(__file__))
+
+class BatchAPIRun(unittest.TestCase):
+
+    def setUp(self):
+        self.auth = config.AUTH
+
+        if not all(self.auth):
+            raise SkipTest
+
+    def test_batch_texttags(self):
+        test_data = ["On Monday, president Barack Obama will be..."]
+        response = batch_text_tags(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+
+    def test_batch_posneg(self):
+        test_data = ['Worst song ever', 'Best song ever']
+        response = batch_sentiment(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(response[0] < 0.5)
+
+    def test_batch_political(self):
+        test_data = ["Guns don't kill people, people kill people."]
+        response = batch_political(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+
+    def test_batch_fer(self):
+        test_data = [np.random.rand(48, 48).tolist()]
+        response = batch_fer(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_facial_features(self):
+        test_data = [np.random.rand(48, 48).tolist()]
+        response = batch_facial_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 48)
+
+    def test_batch_image_features_greyscale(self):
+        test_data = [np.random.rand(64, 64).tolist()]
+        response = batch_image_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 2048)
+
+    def test_batch_image_features_rgb(self):
+        test_data = [np.random.rand(64, 64, 3).tolist()]
+        response = batch_image_features(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], list))
+        self.assertEqual(len(response[0]), 2048)
+
+    def test_batch_language(self):
+        test_data = ['clearly an english sentence']
+        response = batch_language(test_data, auth=self.auth)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(response[0]['English'] > 0.25)
+
+    def test_batch_set_cloud(self):
+        test_data = ['clearly an english sentence']
+        self.assertRaises(ConnectionError,
+                          batch_language,
+                          test_data,
+                          auth=self.auth,
+                          cloud='invalid/cloud')
 
 
 class FullAPIRun(unittest.TestCase):
@@ -67,13 +138,13 @@ class FullAPIRun(unittest.TestCase):
         self.assertEqual(fer_set, set(response.keys()))
 
     def test_happy_fer(self):
-        test_face = self.load_image("../data/happy.png", as_grey=True)
+        test_face = self.load_image("data/happy.png", as_grey=True)
         response = fer(test_face)
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(response['Happy'] > 0.5)
 
     def test_fear_fer(self):
-        test_face = self.load_image("../data/fear.png", as_grey=True)
+        test_face = self.load_image("data/fear.png", as_grey=True)
         response = fer(test_face)
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(response['Fear'] > 0.25)
@@ -93,7 +164,7 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
         self.check_range(response)
-    
+
     def test_good_image_features_greyscale(self):
         test_image = np.random.rand(64, 64).tolist()
         response = image_features(test_image)
@@ -150,6 +221,13 @@ class FullAPIRun(unittest.TestCase):
         language_dict = language('clearly an english sentence')
         self.assertEqual(language_set, set(language_dict.keys()))
         assert language_dict['English'] > 0.25
+
+    def test_set_cloud(self):
+        test_data = 'clearly an english sentence'
+        self.assertRaises(ConnectionError,
+                          language,
+                          test_data,
+                          cloud='invalid/cloud')
 
 
 if __name__ == "__main__":

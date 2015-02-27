@@ -78,13 +78,6 @@ Examples
 >>> language_dict
 {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
 
-```
-
-If you have a local indico server running, simply import from `indicoio.local`.
-
-```
->>> from indicoio.local import political, sentiment, fer, facial_features, language
-```
 
 Batch API Access
 ----------------
@@ -93,5 +86,46 @@ If you'd like to use our batch api interface, please send an email to contact@in
 
 ```
 >>> from indicio import batch_sentiment
-batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
+>>> batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
 ```
+
+Authentication credentials can also be set as the environment variables "INDICO_USERNAME" and "INDICO_PASSWORD" or as 'username' and 'password' in the indicorc file.
+
+Private cloud API Access
+------------------------
+
+If you're looking to use indico's API for high throughput applications, please contact contact@indico.io about our private cloud option.
+
+```
+>>> from indicio import sentiment
+>>> sentiment("Text to analyze", cloud="example", auth=("example@example.com", "********"))
+```
+
+The `cloud` parameter redirects API calls to your private cloud hosted at [cloud].indico.domains. 
+
+Private cloud subdomains can also be set as the environment variable "INDICO_CLOUD" or as 'cloud' in the indicorc file.
+
+Configuration
+------------------------
+
+Indicoio-python will search ./.indicorc and $HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file ($HOME/.indicorc). The indicorc file can be used to set an authentication username and password or a private cloud subdomain, so these arguments don't need to be specified for every api call. All sections are optional.
+
+Here is an example of a valid indicorc file:
+
+
+```
+[auth]
+username = test@example.com
+password = secret
+
+[private_cloud]
+cloud = example
+```
+
+Environment variables take precedence over any configuration found in the indicorc file.
+The following environment variables are valid:
+ - $INDICO_USERNAME
+ - $INDICO_PASSWORD
+ - $INDICO_CLOUD
+
+ Finally, any values explicitly passed in to an api call will override configuration options set in the indicorc file or in an environment variable.

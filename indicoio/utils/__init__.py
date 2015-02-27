@@ -4,35 +4,38 @@ import numpy as np
 from skimage.transform import resize
 
 from indicoio import JSON_HEADERS
+from indicoio import config
 
-def auth_query():
-    email = os.environ.get("INDICO_EMAIL")
-    password = os.environ.get("INDICO_PASSWORD")
 
-    # store settings
-    if not email:
-        email = raw_input("Email: ")
-        os.environ["INDICO_EMAIL"] = email
-
-    if not password:
-        password = getpass.getpass("Password: ")
-        os.environ["INDICO_PASSWORD"] = password
-
-    return (email, password)
-
-def api_handler(arg, url, batch=False, auth=None, **kwargs):
+def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
     data = {'data': arg}
     data.update(**kwargs)
     json_data = json.dumps(data)
+
+    if cloud:
+        host = "%s.indico.domains" % cloud
+    else: 
+        # default to indico public cloud
+        host = config.PUBLIC_API_HOST
+
+    url = "http://%s/%s" % (host, api)
     if batch:
         url += "/batch"
 
-    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth).json()
-    results = response.get('results', False)
+    if not auth:
+        auth = config.AUTH
+
+    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth)
+    if response.status_code == 503 and cloud != None:
+        raise Exception("Private cloud '%s' does not include api '%s'" % (cloud, api))
+
+    json_results = response.json()
+    results = json_results.get('results', False)
     if results is False:
-        error = response.get('error')
+        error = json_results.get('error')
         raise ValueError(error)
     return results
+
 
 class TypeCheck(object):
     """
@@ -118,9 +121,10 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
         return dict(zip(keys, norm_array))
     return norm_array
 
+
 def image_preprocess(image, batch=False):
     """
-    Takes an image and prepares it for sending to the api including 
+    Takes an image and prepares it for sending to the api including
     resizing and image data/structure standardizing.
     """
     if batch:

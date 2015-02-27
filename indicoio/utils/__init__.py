@@ -4,26 +4,22 @@ import numpy as np
 from skimage.transform import resize
 
 from indicoio import JSON_HEADERS
+from indicoio import config
 
-def auth_query():
-    email = os.environ.get("INDICO_EMAIL")
-    password = os.environ.get("INDICO_PASSWORD")
 
-    # store settings
-    if not email:
-        email = raw_input("Email: ")
-        os.environ["INDICO_EMAIL"] = email
-
-    if not password:
-        password = getpass.getpass("Password: ")
-        os.environ["INDICO_PASSWORD"] = password
-
-    return (email, password)
-
-def api_handler(arg, url, batch=False, auth=None, **kwargs):
+def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
     data = {'data': arg}
     data.update(**kwargs)
     json_data = json.dumps(data)
+
+    if cloud:
+        host = "%s.indico.domains"
+    else: 
+        # default to indico public cloud
+        host = config.public_api_host
+
+    url = "http://%s/%s" % (host, api)
+
     if batch:
         url += "/batch"
 
@@ -33,6 +29,7 @@ def api_handler(arg, url, batch=False, auth=None, **kwargs):
         error = response.get('error')
         raise ValueError(error)
     return results
+
 
 class TypeCheck(object):
     """
@@ -117,6 +114,7 @@ def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
     if dict_array:
         return dict(zip(keys, norm_array))
     return norm_array
+
 
 def image_preprocess(image, batch=False):
     """

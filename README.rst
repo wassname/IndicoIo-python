@@ -95,29 +95,39 @@ Examples
 ::
 
 
-    Authentication credentials can also be set as the environment variables "INDICO_USERNAME" and "INDICO_PASSWORD" or as 'username' and 'password' in indicorc
+    Authentication credentials can also be set as the environment variables "INDICO_USERNAME" and "INDICO_PASSWORD" or as 'username' and 'password' in the indicorc file.
 
-    Private Cloud API Access
+    Private cloud API Access
     ------------------------
 
-    If you'd like to use our private cloud interface, please send an email to contact@indico.io.
+    If you're looking to use indico's API for high throughput applications, please contact contact@indico.io about our private cloud option.
 
             from indicio import sentiment sentiment("Text to analyze",
-            hostname="http://exampleprivatecloud.io/",
-            auth=("example@example.com", "\*\*\*\*\*\*\*\*"))
+            cloud="example", auth=("example@example.com",
+            "\*\*\*\*\*\*\*\*"))
 
 ::
 
 
-    Private cloud hostnames can also be set as the environment variable "INDICO_PRIVATE_CLOUD_URL" or as 'hostname' in indicorc
+    The `cloud` parameter redirects API calls to your private cloud hosted at [cloud].indico.domains. 
 
-    indicorc
+    Private cloud subdomains can also be set as the environment variable "INDICO_CLOUD" or as 'cloud' in the indicorc file.
+
+    Configuration
     ------------------------
 
-    Indicoio-python will look first for $HOME/.indicorc then ./.indicorc for the optional configuration file. The indicorc can be used to set an authentication username and password as well as the private cloud hostname, so they don't need to be specified for every call. All sectiions are optional.
+    Indicoio-python will search ./.indicorc and $HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file ($HOME/.indicorc). The indicorc file can be used to set an authentication username and password or a private cloud subdomain, so these arguments don't need to be specified for every api call. All sections are optional.
 
     Here is an example of a valid indicorc file:
 
 [auth] username = test@example.com password = secret
 
-[private\_cloud] hostname = example.indico.io \`\`\`
+[private\_cloud] cloud = example \`\`\`
+
+Environment variables take precedence over any configuration found in
+the indicorc file. The following environment variables are valid: -
+:math:`INDICO_USERNAME  - `\ INDICO\_PASSWORD - $INDICO\_CLOUD
+
+Finally, any values explicitly passed in to an api call will override
+configuration options set in the indicorc file or in an environment
+variable.

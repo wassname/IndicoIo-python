@@ -1,7 +1,7 @@
 from indicoio.utils import api_handler
 import indicoio.config as config
 
-def language(text, url_root=config.api_root, batch=False, auth=None, **kwargs):
+def language(text, cloud=config.cloud, batch=False, auth=None, **kwargs):
     """
     Given input text, returns a probability distribution over 33 possible
     languages of what language the text was written in.
@@ -24,4 +24,4 @@ def language(text, url_root=config.api_root, batch=False, auth=None, **kwargs):
     :rtype: Dictionary of language probability pairs
     """
 
-    return api_handler(text, url_root + "language", batch=batch, auth=auth, **kwargs)
+    return api_handler(text, cloud=cloud, api="language", batch=batch, auth=auth, **kwargs)

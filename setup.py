@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.4.15',
+    version='0.5.0',
     packages=[
         "indicoio",
         "indicoio.text",
@@ -21,7 +21,7 @@ setup(
         Use pre-built state of the art machine learning algorithms with a single line of code.
     """,
     license="MIT License (See LICENSE)",
-    long_description=open("README").read(),
+    long_description=open("README.rst").read(),
     url="https://github.com/IndicoDataSolutions/indicoio-python",
     author="Alec Radford, Slater Victoroff, Aidan McLaughlin",
     author_email="""

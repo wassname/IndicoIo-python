@@ -85,8 +85,10 @@ Examples
 Batch API Access
 ----------------
 
-If you'd like to use our batch api interface, please send an email to
-contact@indico.io.
+If you'd like to use our batch api interface, please check out the
+`pricing
+page <https://github.com/IndicoDataSolutions/IndicoIo-python>`__ on our
+website to find the right plan for you.
 
 ::
 
@@ -101,7 +103,9 @@ Private cloud API Access
 ------------------------
 
 If you're looking to use indico's API for high throughput applications,
-please contact contact@indico.io about our private cloud option.
+please check out the `pricing
+page <https://github.com/IndicoDataSolutions/IndicoIo-python>`__ on our
+website to find the right plan for you.
 
 ::
 
@@ -118,7 +122,7 @@ Configuration
 -------------
 
 Indicoio-python will search ./.indicorc and
-HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file (`\ HOME/.indicorc).
+:math:`HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file (`\ HOME/.indicorc).
 The indicorc file can be used to set an authentication username and
 password or a private cloud subdomain, so these arguments don't need to
 be specified for every api call. All sections are optional.

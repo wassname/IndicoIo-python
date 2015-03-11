@@ -50,6 +50,19 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 48)
 
+    # TODO: uncomment this test once the remote server is updated to
+    # deal with image_urls
+    # def test_batch_image_urls(self):
+    #     test_data = ['http://textfac.es/static/ico/favicon.png',
+    #                  'http://textfac.es/static/ico/favicon.png']
+    #     response = batch_facial_features(test_data, auth=self.auth)
+    #     self.assertTrue(isinstance(response, list))
+    #     self.assertTrue(isinstance(response[0], list))
+    #     self.assertEqual(len(response[0]), 48)
+
+    # TODO: add tests to test when one url is incorrect once we
+    # have decided how we are dealing with them
+
     def test_batch_image_features_greyscale(self):
         test_data = [np.random.rand(64, 64).tolist()]
         response = batch_image_features(test_data, auth=self.auth)
@@ -164,6 +177,16 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 48)
         self.check_range(response)
+
+    # TODO: uncomment this test once the remote server is updated to
+    # deal with image_urls
+    # def test_image_url(self):
+    #     test_face = 'http://textfac.es/static/ico/favicon.png'
+    #     response = facial_features(test_face)
+
+    #     self.assertTrue(isinstance(response, list))
+    #     self.assertEqual(len(response), 48)
+    #     self.check_range(response)
 
     def test_good_image_features_greyscale(self):
         test_image = np.random.rand(64, 64).tolist()

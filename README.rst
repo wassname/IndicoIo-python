@@ -122,7 +122,7 @@ Configuration
 -------------
 
 Indicoio-python will search ./.indicorc and
-:math:`HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file (`\ HOME/.indicorc).
+HOME/.indicorc for the optional configuration file. Values in the local configuration file (./.indicorc) take precedence over those found in a global configuration file (`\ HOME/.indicorc).
 The indicorc file can be used to set an authentication username and
 password or a private cloud subdomain, so these arguments don't need to
 be specified for every api call. All sections are optional.

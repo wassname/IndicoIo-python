@@ -14,7 +14,7 @@ def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
 
     if cloud:
         host = "%s.indico.domains" % cloud
-    else: 
+    else:
         # default to indico public cloud
         host = config.PUBLIC_API_HOST
 
@@ -142,3 +142,13 @@ def image_preprocess(image, batch=False):
     image = resize(image,(64,64))
     image = image.tolist()
     return image
+
+
+def is_url(data, batch=False):
+    if batch and isinstance(data[0], basestring):
+        return True
+    if not batch and isinstance(data, basestring):
+        return True
+    return False
+
+

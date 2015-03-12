@@ -1,9 +1,7 @@
-import json
-
 import requests
 import numpy as np
 
-from indicoio.utils import image_preprocess, api_handler
+from indicoio.utils import image_preprocess, api_handler, is_url
 import indicoio.config as config
 
 def facial_features(image, cloud=config.CLOUD, batch=False, auth=None, **kwargs):
@@ -60,5 +58,6 @@ def image_features(image, cloud=config.CLOUD, batch=False, auth=None, **kwargs):
     :type image: numpy.ndarray
     :rtype: List containing features
     """
-    image = image_preprocess(image, batch=batch)
+    if not is_url(image, batch=batch):
+        image = image_preprocess(image, batch=batch)
     return api_handler(image, cloud=cloud, api="imagefeatures", batch=batch, auth=auth, **kwargs)

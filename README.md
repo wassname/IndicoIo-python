@@ -82,7 +82,7 @@ Examples
 Batch API Access
 ----------------
 
-If you'd like to use our batch api interface, please check out the [pricing page](https://github.com/IndicoDataSolutions/IndicoIo-python) on our website to find the right plan for you.
+If you'd like to use our batch api interface, please check out the [pricing page](https://indico.io/pricing) on our website to find the right plan for you.
 
 ```
 >>> from indicio import batch_sentiment
@@ -94,7 +94,7 @@ Authentication credentials can also be set as the environment variables `$INDICO
 Private cloud API Access
 ------------------------
 
-If you're looking to use indico's API for high throughput applications, please check out the [pricing page](https://github.com/IndicoDataSolutions/IndicoIo-python) on our website to find the right plan for you.
+If you're looking to use indico's API for high throughput applications, please check out the [pricing page](https://indico.io/pricing) on our website to find the right plan for you.
 
 ```
 >>> from indicio import sentiment

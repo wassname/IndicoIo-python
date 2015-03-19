@@ -13,7 +13,7 @@ Our APIs are totally free to use, and ready to be used in your application. No d
 Installation
 ------------
 ```
-pip install indicoio
+pip install indicoioindicio
 ```
 
 Documentation
@@ -85,7 +85,7 @@ Batch API Access
 If you'd like to use our batch api interface, please check out the [pricing page](https://indico.io/pricing) on our website to find the right plan for you.
 
 ```
->>> from indicio import batch_sentiment
+>>> from indicoio import batch_sentiment
 >>> batch_sentiment(['Text to analyze', 'More text'], auth=("example@example.com", "********"))
 ```
 
@@ -97,7 +97,7 @@ Private cloud API Access
 If you're looking to use indico's API for high throughput applications, please check out the [pricing page](https://indico.io/pricing) on our website to find the right plan for you.
 
 ```
->>> from indicio import sentiment
+>>> from indicoio import sentiment
 >>> sentiment("Text to analyze", cloud="example", auth=("example@example.com", "********"))
 ```
 

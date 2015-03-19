@@ -13,7 +13,7 @@ Our APIs are totally free to use, and ready to be used in your application. No d
 Installation
 ------------
 ```
-pip install indicoioindicio
+pip install indicoio
 ```
 
 Documentation

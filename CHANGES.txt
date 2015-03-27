@@ -20,3 +20,4 @@ v0.4.14, Sat Dec 20 -- Fix for batch image features preprocessing, increased tes
 v0.4.15, Sat Dec 20 -- Bug fix release
 v0.5.0, Friday Feb 27 -- Updated to support private cloud, allows for indicorc file to reduce redundant authorization calls, README updates
 v0.5.1, Friday Feb 27 -- More README updates, fixed rst formatting issue, added classifiers
+v0.5.2, Tue March 7 -- Required API keys, configuration settings

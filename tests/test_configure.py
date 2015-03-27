@@ -27,11 +27,9 @@ class TestConfigureEnv(unittest.TestCase):
         """
         Ensure cloud authentication credentials are read in from environment variables
         """
-        username = "test"
-        password = "password"
-        os.environ["INDICO_USERNAME"] = username
-        os.environ["INDICO_PASSWORD"] = password
-        assert config.SETTINGS.auth() == (username, password)
+        api_key = "text"
+        os.environ["INDICO_API_KEY"] = api_key
+        assert config.SETTINGS.api_key() == api_key
 
 
 class TestConfigurationFile(unittest.TestCase):
@@ -40,17 +38,15 @@ class TestConfigurationFile(unittest.TestCase):
     """
 
     def setUp(self):
-        self.username = "test"
-        self.password = "password"
+        self.api_key = "test"
         self.cloud = "localhost"
         config = """
         [auth]
-        username = %s
-        password = %s
+        api_key = %s
 
         [private_cloud]
         cloud = %s
-        """ % (self.username, self.password, self.cloud)
+        """ % (self.api_key, self.cloud)
 
         config_file = StringIO(textwrap.dedent(config))
         self.settings = Settings(files=[config_file])
@@ -66,7 +62,7 @@ class TestConfigurationFile(unittest.TestCase):
         """
         Ensure cloud authentication credentials are read in from file
         """
-        assert self.settings.auth() == (self.username, self.password)        
+        assert self.settings.api_key() == self.api_key        
 
 
 class TestPrecedence(unittest.TestCase):
@@ -75,27 +71,23 @@ class TestPrecedence(unittest.TestCase):
     """
 
     def setUp(self):
-        self.file_username = "file-username"
-        self.file_password = "file-password"
+        self.file_api_key = "file-api-key"
         self.file_cloud = "file-cloud"
 
-        self.env_username = "env-username"
-        self.env_password = "env-password"      
+        self.env_api_key = "env-api-key"  
         self.env_cloud = "env-cloud"
         config = """
         [auth]
-        username = %s
-        password = %s
+        api_key = %s
 
         [private_cloud]
         cloud = %s
-        """ % (self.file_username, self.file_password, self.file_cloud)
+        """ % (self.file_api_key, self.file_cloud)
 
         config_file = StringIO(textwrap.dedent(config))
         os.environ = {
             'INDICO_CLOUD': self.env_cloud,
-            'INDICO_USERNAME': self.env_username,
-            'INDICO_PASSWORD': self.env_password
+            'INDICO_API_KEY': self.env_api_key
         }
         self.settings = Settings(files=[config_file])
 
@@ -110,7 +102,7 @@ class TestPrecedence(unittest.TestCase):
         Ensure cloud authentication credentials set in environment variables 
         are used over those in config files
         """
-        assert self.settings.auth() == (self.env_username, self.env_password)        
+        assert self.settings.api_key() == self.env_api_key       
 
 
 class TestConfigFilePrecedence(unittest.TestCase):
@@ -119,37 +111,31 @@ class TestConfigFilePrecedence(unittest.TestCase):
     """
 
     def setUp(self):
-        self.high_priority_username = "high-priority-username"
-        self.high_priority_password = "high-priority-password"
+        self.high_priority_api_key = "high-priority-api-key"
         self.high_priority_cloud = "high-priority-cloud"
 
-        self.low_priority_username = "low-priority-username"
-        self.low_priority_password = "low-priority-password"
+        self.low_priority_api_key = "low-priority-api-key"
         self.low_priority_cloud = "low-priority-cloud"
 
         high_priority_config = """
         [auth]
-        username = %s
-        password = %s
+        api_key = %s
 
         [private_cloud]
         cloud = %s
         """ % (
-            self.high_priority_username, 
-            self.high_priority_password, 
+            self.high_priority_api_key,
             self.high_priority_cloud
         )
 
         low_priority_config = """
         [auth]
         username = %s
-        password = %s
 
         [private_cloud]
         cloud = %s
         """ % (
-            self.low_priority_username, 
-            self.low_priority_password, 
+            self.low_priority_api_key,
             self.low_priority_cloud
         )
 
@@ -172,4 +158,4 @@ class TestConfigFilePrecedence(unittest.TestCase):
         """
         Ensure the cloud auth priority is handled properly
         """
-        assert self.settings.auth() == (self.high_priority_username, self.high_priority_password)        
+        assert self.settings.api_key() == self.high_priority_api_key

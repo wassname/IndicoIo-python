@@ -6,11 +6,12 @@ from skimage.transform import resize
 from indicoio import JSON_HEADERS
 from indicoio import config
 
-
-def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
+def api_handler(arg, cloud, api, batch=False, api_key=None, **kwargs):
     data = {'data': arg}
     data.update(**kwargs)
     json_data = json.dumps(data)
+    if not cloud:
+        cloud=config.cloud
 
     if cloud:
         host = "%s.indico.domains" % cloud
@@ -18,14 +19,15 @@ def api_handler(arg, cloud, api, batch=False, auth=None, **kwargs):
         # default to indico public cloud
         host = config.PUBLIC_API_HOST
 
-    url = "http://%s/%s" % (host, api)
-    if batch:
-        url += "/batch"
+    if not api_key:
+        api_key = config.api_key
 
-    if not auth:
-        auth = config.AUTH
+    url = config.url_protocol + "//%s/%s" % (host, api)
+    url = url + "/batch" if batch else url
+    url += "?key=%s" % api_key
 
-    response = requests.post(url, data=json_data, headers=JSON_HEADERS, auth=auth)
+
+    response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:
         raise Exception("Private cloud '%s' does not include api '%s'" % (cloud, api))
 

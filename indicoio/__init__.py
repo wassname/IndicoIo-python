@@ -2,7 +2,7 @@ from functools import partial
 
 JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-Version, version, __version__, VERSION = ('0.5.1',) * 4
+Version, version, __version__, VERSION = ('0.5.2',) * 4
 
 from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment

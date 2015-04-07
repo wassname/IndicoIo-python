@@ -16,36 +16,40 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 class BatchAPIRun(unittest.TestCase):
 
     def setUp(self):
-        self.auth = config.AUTH
+        self.api_key = config.api_key
+        config.url_protocol = "http:"
 
-        if not all(self.auth):
+        if not all(self.api_key):
             raise SkipTest
+
+    def tearDown(self):
+        config.url_protocol = "https:"
 
     def test_batch_texttags(self):
         test_data = ["On Monday, president Barack Obama will be..."]
-        response = batch_text_tags(test_data, auth=self.auth)
+        response = batch_text_tags(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
 
     def test_batch_posneg(self):
         test_data = ['Worst song ever', 'Best song ever']
-        response = batch_sentiment(test_data, auth=self.auth)
+        response = batch_sentiment(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0] < 0.5)
 
     def test_batch_political(self):
         test_data = ["Guns don't kill people, people kill people."]
-        response = batch_political(test_data, auth=self.auth)
+        response = batch_political(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
 
     def test_batch_fer(self):
         test_data = [np.random.rand(48, 48).tolist()]
-        response = batch_fer(test_data, auth=self.auth)
+        response = batch_fer(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
     def test_batch_facial_features(self):
         test_data = [np.random.rand(48, 48).tolist()]
-        response = batch_facial_features(test_data, auth=self.auth)
+        response = batch_facial_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 48)
@@ -65,21 +69,21 @@ class BatchAPIRun(unittest.TestCase):
 
     def test_batch_image_features_greyscale(self):
         test_data = [np.random.rand(64, 64).tolist()]
-        response = batch_image_features(test_data, auth=self.auth)
+        response = batch_image_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 2048)
 
     def test_batch_image_features_rgb(self):
         test_data = [np.random.rand(64, 64, 3).tolist()]
-        response = batch_image_features(test_data, auth=self.auth)
+        response = batch_image_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 2048)
 
     def test_batch_language(self):
         test_data = ['clearly an english sentence']
-        response = batch_language(test_data, auth=self.auth)
+        response = batch_language(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
 
@@ -88,7 +92,7 @@ class BatchAPIRun(unittest.TestCase):
         self.assertRaises(ConnectionError,
                           batch_language,
                           test_data,
-                          auth=self.auth,
+                          api_key=self.api_key,
                           cloud='invalid/cloud')
 
 
@@ -124,11 +128,11 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(political_set, set(response.keys()))
 
-        test_string = "Save the whales"
+        test_string = "pro-choice"
         response = political(test_string)
 
         self.assertTrue(isinstance(response, dict))
-        assert response['Green'] > 0.5
+        assert response['Liberal'] > 0.25
 
     def test_posneg(self):
         test_string = "Worst song ever."
@@ -251,6 +255,39 @@ class FullAPIRun(unittest.TestCase):
                           language,
                           test_data,
                           cloud='invalid/cloud')
+
+        temp_cloud = config.cloud
+        config.cloud = 'invalid/cloud'
+
+        self.assertEqual(config.cloud, 'invalid/cloud')
+        self.assertRaises(ConnectionError,
+                          language,
+                          test_data)
+
+        config.cloud = temp_cloud
+
+        self.assertRaises(ConnectionError,
+                          language,
+                          test_data,
+                          cloud='indico-test')
+
+    def test_set_api_key(self):
+        test_data = 'clearly an english sentence'
+        self.assertRaises(ValueError,
+                          language,
+                          test_data,
+                          api_key ='invalid_api_key')
+
+        temp_api_key = config.api_key
+        config.api_key = 'invalid_api_key'
+
+        self.assertEqual(config.api_key, 'invalid_api_key')
+        self.assertRaises(ValueError,
+                          language,
+                          test_data)
+
+        config.api_key = temp_api_key
+
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ pip install indicoio
 
 Documentation
 ------------
-Available at [indico.reame.io](http://indico.readme.io/v1.0/docs)
+Available at [indico.readme.io](http://indico.readme.io/v1.0/docs)
 
 Current APIs
 ------------

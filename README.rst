@@ -25,7 +25,7 @@ API Keys + Setup
 ----------------
 
 For API key registration and setup, checkout our `quickstart
-guide <https://dash.readme.io/project/indico/v2.0/docs/api-keys>`__.
+guide <http://docs.indico.io/v2.0/docs/api-keys>`__.
 
 Full Documentation
 ------------------

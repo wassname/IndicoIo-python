@@ -78,8 +78,8 @@ Examples
 {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
 ```
 
-Batch API Access
-----------------
+Batch API
+---------
 Each `indicoio` function has a corresponding batch function for analyzing many examples with a single request. Simply pass in a list of inputs and receive a list of results in return.
 ```python
 >>> from indicoio import batch_sentiment

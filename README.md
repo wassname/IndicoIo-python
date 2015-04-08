@@ -23,7 +23,7 @@ python setup.py install
 
 API Keys + Setup
 ----------------
-For API key registration and setup, checkout our [quickstart guide](https://dash.readme.io/project/indico/v2.0/docs/api-keys).
+For API key registration and setup, checkout our [quickstart guide](http://docs.indico.io/v2.0/docs/python).
 
 Full Documentation
 ------------

@@ -13,8 +13,6 @@ From PyPI:
 pip install indicoio
 ```
 
-Installation
-------------
 From source:
 ```bash
 git clone https://github.com/IndicoDataSolutions/IndicoIo-python.git 

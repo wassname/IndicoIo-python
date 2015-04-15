@@ -54,7 +54,8 @@ Examples
     >>> indicoio.config.api_key = "YOUR_API_KEY"
 
     >>> political("Guns don't kill people. People kill people.")
-    {u'Libertarian': 0.47740164630834825, u'Green': 0.08454409540443657, u'Liberal': 0.16617097211030055, u'Conservative': 0.2718832861769146}
+    {u'Libertarian': 0.47740164630834825, u'Green': 0.08454409540443657, 
+        u'Liberal': 0.16617097211030055, u'Conservative': 0.2718832861769146}
 
     >>> sentiment('Worst movie ever.')
     0.07062467665597527
@@ -75,13 +76,15 @@ Examples
     >>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
 
     >>> fer(test_face)
-    {u'Angry': 0.08843749137458341, u'Sad': 0.39091163159204684, u'Neutral': 0.1947947999669361, u'Surprise': 0.03443785859010413, u'Fear': 0.17574534848440568, u'Happy': 0.11567286999192382}
+    {u'Angry': 0.08843749137458341, u'Sad': 0.39091163159204684, u'Neutral': 0.1947947999669361,
+         u'Surprise': 0.03443785859010413, u'Fear': 0.17574534848440568, u'Happy': 0.11567286999192382}
 
     >>> facial_features(test_face)
     [0.0, -0.02568680526917187, 0.21645604230056517, ..., 3.0342637531932777]
 
     >>> language('Quis custodiet ipsos custodes')
-    {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
+    {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, 
+        u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
 
 Batch API Access
 ----------------

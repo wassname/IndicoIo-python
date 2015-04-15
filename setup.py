@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.5.2',
+    version='0.5.3',
     packages=[
         "indicoio",
         "indicoio.text",
@@ -28,8 +28,8 @@ setup(
         Alec Radford <alec@indico.io>,
         Slater Victoroff <slater@indico.io>,
         Aidan McLaughlin <aidan@indico.io>,
+        Madison May <madison@indico.io>,
         Anne Carlson <annie@indico.io>
-
     """,
     classifiers = [
         "Development Status :: 5 - Production/Stable",
@@ -53,6 +53,7 @@ setup(
         "requests >= 1.2.3",
         "six >= 1.3.0",
         "numpy >= 1.8.1",
+        "scipy >= 0.14.0",
         "scikit-image >= 0.10.1",
     ],
 )

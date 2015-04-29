@@ -23,7 +23,7 @@ setup(
     license="MIT License (See LICENSE)",
     long_description=open("README.rst").read(),
     url="https://github.com/IndicoDataSolutions/indicoio-python",
-    author="Alec Radford, Slater Victoroff, Aidan McLaughlin, Anne Carlson",
+    author="Alec Radford, Slater Victoroff, Aidan McLaughlin, Madison May, Anne Carlson",
     author_email="""
         Alec Radford <alec@indico.io>,
         Slater Victoroff <slater@indico.io>,

@@ -1,6 +1,6 @@
 from functools import partial
 
-JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain', 'Source': 'python'}
 
 Version, version, __version__, VERSION = ('0.5.3',) * 4
 

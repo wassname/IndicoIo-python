@@ -1,6 +1,4 @@
-from indicoio import JSON_HEADERS
 from indicoio.utils import api_handler
-import indicoio.config as config
 
 def political(text, cloud=None, batch=False, api_key=None, **kwargs):
     """

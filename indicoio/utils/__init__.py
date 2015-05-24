@@ -1,10 +1,12 @@
-import inspect, json, getpass, os
+import inspect, json, getpass, os.path, base64, StringIO, re, warnings
 import requests
-import numpy as np
-from skimage.transform import resize
+from PIL import Image
 
 from indicoio import JSON_HEADERS
 from indicoio import config
+
+B64_PATTERN = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)")
+
 
 def api_handler(arg, cloud, api, batch=False, api_key=None, **kwargs):
     data = {'data': arg}
@@ -80,70 +82,99 @@ class DataStructureException(Exception):
         function %s does not accept %s, accepted types are: %s
         """ % (self.callback, self.structure, str(self.accepted))
 
-
-@TypeCheck((list, dict, np.ndarray), 'array')
-def normalize(array, distribution=1, norm_range=(0, 1), **kwargs):
-    """
-    First arg is an array, whether that's in the form of a numpy array,
-    a list, or a dictionary that contains the data in its values.
-
-    Second arg is the desired distribution which would be applied before
-    normalization.
-        Supports linear, exponential, logarithmic and raising to whatever
-        power specified (in which case you just put a number)
-
-    Third arg is the range across which you want the data normalized
-    """
-    # Handling dictionary array input
-    # Note: lists and numpy arrays behave the same in this program
-    dict_array = isinstance(array, dict)
-
-    if dict_array:
-        keys = array.keys()
-        array = np.array(array.values()).astype('float')
-    else:  # Decorator errors if this isn't a list or a numpy array
-        array = np.array(array).astype('float')
-
-    # Handling various distributions
-    if type(distribution) in [float, int]:
-        array = np.power(array, distribution)
-    else:
-        array = getattr(np, distribution)(array, **kwargs)
-
-    # Prep for normalization
-    x_max, x_min = (np.max(array), np.min(array))
-
-    def norm(element,x_min,x_max):
-        base_span = (element - x_min)*(norm_range[-1] - norm_range[0])
-        return norm_range[0] + base_span / (x_max - x_min)
-
-    norm_array = np.vectorize(norm)(array, x_min, x_max)
-
-    if dict_array:
-        return dict(zip(keys, norm_array))
-    return norm_array
-
-
-def image_preprocess(image, batch=False):
+def image_preprocess(image, size=(48,48), batch=False):
     """
     Takes an image and prepares it for sending to the api including
     resizing and image data/structure standardizing.
     """
     if batch:
         return [image_preprocess(img, batch=False) for img in image]
-    if isinstance(image,list):
-        image = np.asarray(image)
-    if type(image).__module__ != np.__name__:
-        raise ValueError('Image was not of type numpy.ndarray or list.')
-    if str(image.dtype) in ['int64','uint8']:
-        image = image/255.
-    if len(image.shape) == 2:
-        image = np.dstack((image,image,image))
-    if len(image.shape) == 4:
-        image = image[:,:,:3]
-    image = resize(image,(64,64))
-    image = image.tolist()
-    return image
+
+    if isinstance(image, str):
+        b64_str = re.sub('^data:image/.+;base64,', '', image)
+        if os.path.isfile(image):
+            # check type of element
+            outImage = Image.open(image)
+        elif B64_PATTERN.match(b64_str) is not None:
+            return b64_str
+        else:
+            raise ValueError("string provided must be a valid filepath or base64 encoded string")
+
+    elif isinstance(image, list): # image passed in is a list and not np.array
+        warnings.warn(
+            "Input as lists of pixels will be deprecated in the next major update",
+            DeprecationWarning
+        )
+        outImage = process_list_image(image)
+    elif type(image).__name__ == "ndarray": # image is from numpy/scipy
+        out_image = Image.fromarray(image)
+    else:
+        raise ValueError("image must be a filepath, base64 encoded string, or a numpy array")
+
+    # image resizing
+    outImage = outImage.resize(size)
+
+    # convert to base64
+    temp_output = StringIO.StringIO()
+    outImage.save(temp_output, format='PNG')
+    temp_output.seek(0)
+    output_s = temp_output.read()
+
+    return base64.b64encode(output_s)
+
+def get_list_dimensions(_list):
+    """
+    Takes a nested list and returns the size of each dimension followed
+    by the element type in the list
+    """
+    if isinstance(_list, list) or isinstance(_list, tuple):
+        return [len(_list)] + get_list_dimensions(_list[0])
+    return []
+
+def get_element_type(_list, dimens):
+    """
+    Given the dimensions of a nested list and the list, returns the type of the
+    elements in the inner list.
+    """
+    elem = _list
+    for _ in xrange(len(dimens)):
+        elem = elem[0]
+    return type(elem)
+
+def process_list_image(_list):
+    """
+    Processes list to be [[(int, int, int), ...]]
+    """
+    # Check if list is empty
+    if not _list:
+        return _list
+
+    dimens = get_list_dimensions(_list)
+    data_type = get_element_type(_list, dimens)
+
+    seq_obj = []
+
+    outImage = Image.new("RGB", (dimens[0], dimens[1]))
+    for i in xrange(dimens[0]):
+        for j in xrange(dimens[1]):
+            elem = _list[i][j]
+            if len(dimens) >= 3:
+                #RGB(A)
+                if data_type == float:
+                    seq_obj.append((int(elem[0] * 255), int(elem[1] * 255), int(elem[2] * 255)))
+                else:
+                    seq_obj.append(elem[0:3])
+            elif data_type == float:
+                #Grayscale 0 - 1.0f
+                seq_obj.append((int(elem * 255), ) * 3)
+            else:
+                #Grayscale 0 - 255
+                seq_obj.append((elem, ) * 3)
+
+    #Needs to be 0 - 255 in flattened list of (R, G, B)
+    outImage.putdata(data = seq_obj)
+
+    return outImage
 
 
 def is_url(data, batch=False):
@@ -152,5 +183,3 @@ def is_url(data, batch=False):
     if not batch and isinstance(data, basestring):
         return True
     return False
-
-

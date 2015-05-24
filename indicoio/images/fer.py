@@ -1,5 +1,4 @@
 import requests
-import numpy as np
 
 from indicoio.utils import api_handler
 import indicoio.config as config

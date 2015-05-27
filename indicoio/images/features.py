@@ -24,6 +24,7 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :type image: list of lists
     :rtype: List containing feature responses
     """
+    image = image_preprocess(image, batch=batch)
     return api_handler(image, cloud=cloud, api="facialfeatures", batch=batch, api_key=api_key, **kwargs)
 
 def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):

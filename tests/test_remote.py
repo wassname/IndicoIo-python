@@ -46,6 +46,27 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
+    def test_batch_fer_bad_b64(self):
+        test_data = ["$bad#FI jeaf9(#0"]
+        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+
+    def test_batch_fer_good_b64(self):
+        test_data = ["iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAg5JREFUeNrEV4uNgzAMpegGyAgZgQ3KBscIjMAGx03QEdqbgG5AOwG3AWwAnSCXqLZkuUkwhfYsvaLm5xc7sZ1dIhdtUVjsLZRFTvp+LSaLq8UZ/s+KMSbZCcY5RV9E4QQKHG7QtgeCGv4PFt8WpzkCcztu3TiL0eJgkQmsVFn0MK+LzYkRKEGpG1GDyZdKRdaolhAoJewXnJsO1jtKCFDlChZAFxyJj2PnBRU20KZg7oMlOAENijpi8hwmGkKkZW2GzONtVLA/DxHAhTO2I7MCVBSQ6nGDlEBJDhyVYiUBHXBxzQm0wE4FzPYsGs856dA9SAAP2oENzFYqR6iAFQpHIAUzO/nxnOgthF/lM3w/3U8KYXTwxG/1IgIulF+wPQUXDMl75UoJZIHstRWpaGb8IGYqwBoKlG/lgpzoUEBoj50p8QtVrmHgaaXyC/H3BFC+e9kGFlCB0CtBF7FifQ8D9zjQQHj0pdOM3F1pUBoFKdxtqkMClScHJCSDlSxhHSNRT5K+FaZnHglrz+AGoxZLKNLYH6s3CkkuyJlp58wviZ4PuSCWDXl5hmjZtxcSCGbDUD3gK7EMOZBLCETrgVBF5K0lI5bIZ0wfrYh8NWHIAiNTPHpuTOKpCes1VTFaiNaFdGwPfdmaqlj6LmjJbgoSSfUW74K3voz+/W0oIeB7HWu2s+dfx3N+eLX8CTAAwUmKjK/dHS4AAAAASUVORK5CYII="]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_fer_filepath(self):
+        test_data = [os.path.normpath(os.path.join(DIR, "data/fear.png"))]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_fer_nonexistant_filepath(self):
+        test_data = ["data/unhappy.png"]
+        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+
+
     def test_batch_facial_features(self):
         test_data = [generate_array((48,48))]
         response = batch_facial_features(test_data, api_key=self.api_key)

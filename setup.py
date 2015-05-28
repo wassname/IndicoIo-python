@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.5.3',
+    version='0.6.0',
     packages=[
         "indicoio",
         "indicoio.text",
@@ -46,14 +46,12 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     setup_requires=[
-        "numpy >= 1.8.1",
         "six >= 1.3.0",
+        "pillow >= 2.8.1"
     ],
     install_requires=[
         "requests >= 1.2.3",
         "six >= 1.3.0",
-        "numpy >= 1.8.1",
-        "scipy >= 0.14.0",
-        "scikit-image >= 0.10.1",
+        "pillow >= 2.8.1"
     ],
 )

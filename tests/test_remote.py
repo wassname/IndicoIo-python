@@ -1,9 +1,8 @@
 import unittest
-import os
+import os, random
+from PIL import Image
 from requests import ConnectionError
 
-import numpy as np
-import skimage.io
 from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import config
@@ -42,13 +41,34 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
 
     def test_batch_fer(self):
-        test_data = [np.random.rand(48, 48).tolist()]
+        test_data = [generate_array((48,48))]
         response = batch_fer(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
+    def test_batch_fer_bad_b64(self):
+        test_data = ["$bad#FI jeaf9(#0"]
+        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+
+    def test_batch_fer_good_b64(self):
+        test_data = ["iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAg5JREFUeNrEV4uNgzAMpegGyAgZgQ3KBscIjMAGx03QEdqbgG5AOwG3AWwAnSCXqLZkuUkwhfYsvaLm5xc7sZ1dIhdtUVjsLZRFTvp+LSaLq8UZ/s+KMSbZCcY5RV9E4QQKHG7QtgeCGv4PFt8WpzkCcztu3TiL0eJgkQmsVFn0MK+LzYkRKEGpG1GDyZdKRdaolhAoJewXnJsO1jtKCFDlChZAFxyJj2PnBRU20KZg7oMlOAENijpi8hwmGkKkZW2GzONtVLA/DxHAhTO2I7MCVBSQ6nGDlEBJDhyVYiUBHXBxzQm0wE4FzPYsGs856dA9SAAP2oENzFYqR6iAFQpHIAUzO/nxnOgthF/lM3w/3U8KYXTwxG/1IgIulF+wPQUXDMl75UoJZIHstRWpaGb8IGYqwBoKlG/lgpzoUEBoj50p8QtVrmHgaaXyC/H3BFC+e9kGFlCB0CtBF7FifQ8D9zjQQHj0pdOM3F1pUBoFKdxtqkMClScHJCSDlSxhHSNRT5K+FaZnHglrz+AGoxZLKNLYH6s3CkkuyJlp58wviZ4PuSCWDXl5hmjZtxcSCGbDUD3gK7EMOZBLCETrgVBF5K0lI5bIZ0wfrYh8NWHIAiNTPHpuTOKpCes1VTFaiNaFdGwPfdmaqlj6LmjJbgoSSfUW74K3voz+/W0oIeB7HWu2s+dfx3N+eLX8CTAAwUmKjK/dHS4AAAAASUVORK5CYII="]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_fer_filepath(self):
+        test_data = [os.path.normpath(os.path.join(DIR, "data/fear.png"))]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_fer_nonexistant_filepath(self):
+        test_data = ["data/unhappy.png"]
+        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+
+
     def test_batch_facial_features(self):
-        test_data = [np.random.rand(48, 48).tolist()]
+        test_data = [generate_array((48,48))]
         response = batch_facial_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
@@ -68,14 +88,14 @@ class BatchAPIRun(unittest.TestCase):
     # have decided how we are dealing with them
 
     def test_batch_image_features_greyscale(self):
-        test_data = [np.random.rand(64, 64).tolist()]
+        test_data = [generate_array((48,48))]
         response = batch_image_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
         self.assertEqual(len(response[0]), 2048)
 
     def test_batch_image_features_rgb(self):
-        test_data = [np.random.rand(64, 64, 3).tolist()]
+        test_data = [generate_array((48,48))]
         response = batch_image_features(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], list))
@@ -99,15 +119,19 @@ class BatchAPIRun(unittest.TestCase):
 class FullAPIRun(unittest.TestCase):
 
     def load_image(self, relpath, as_grey=False):
-        image_path = os.path.normpath(os.path.join(DIR, relpath))
-        image = skimage.io.imread(image_path, as_grey=True).tolist()
-        return image
+        im = Image.open(os.path.normpath(os.path.join(DIR, relpath))).convert('L');
+        pixels = list(im.getdata())
+        width, height = im.size
+        pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
+        return pixels
 
-    def check_range(self, list, minimum=0.9, maximum=0.1, span=0.5):
-        vector = np.asarray(list)
-        self.assertTrue(vector.max() > maximum)
-        self.assertTrue(vector.min() < minimum)
-        self.assertTrue(np.ptp(vector) > span)
+    def check_range(self, _list, minimum=0.9, maximum=0.1, span=0.5):
+        vector = list(flatten(_list))
+        _max = max(vector)
+        _min = min(vector)
+        self.assertTrue(max(vector) > maximum)
+        self.assertTrue(min(vector) < minimum)
+        self.assertTrue(_max - _min > span)
 
     def test_text_tags(self):
         text = "On Monday, president Barack Obama will be..."
@@ -148,7 +172,7 @@ class FullAPIRun(unittest.TestCase):
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
-        test_face = np.random.rand(48,48).tolist()
+        test_face = generate_array((48,48))
         response = fer(test_face)
 
         self.assertTrue(isinstance(response, dict))
@@ -168,14 +192,14 @@ class FullAPIRun(unittest.TestCase):
 
     def test_bad_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
-        test_face = np.random.rand(56,56).tolist()
+        test_face = generate_array((56, 56))
         response = fer(test_face)
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
 
     def test_good_facial_features(self):
-        test_face = np.random.rand(48,48).tolist()
+        test_face = generate_array((48,48))
         response = facial_features(test_face)
 
         self.assertTrue(isinstance(response, list))
@@ -193,7 +217,7 @@ class FullAPIRun(unittest.TestCase):
     #     self.check_range(response)
 
     def test_good_image_features_greyscale(self):
-        test_image = np.random.rand(64, 64).tolist()
+        test_image = generate_array((48,48))
         response = image_features(test_image)
 
         self.assertTrue(isinstance(response, list))
@@ -201,7 +225,7 @@ class FullAPIRun(unittest.TestCase):
         self.check_range(response)
 
     def test_good_image_features_rgb(self):
-        test_image = np.random.rand(64, 64, 3).tolist()
+        test_image = [[(random.random(),) * 3 for _ in xrange(48)] for _ in xrange(48)]
         response = image_features(test_image)
 
         self.assertTrue(isinstance(response, list))
@@ -288,6 +312,16 @@ class FullAPIRun(unittest.TestCase):
 
         config.api_key = temp_api_key
 
+def flatten(container):
+    for i in container:
+        if isinstance(i, list) or isinstance(i, tuple):
+            for j in flatten(i):
+                yield j
+        else:
+            yield i
+
+def generate_array(size):
+    return [[random.random() for _ in xrange(size[0])] for _ in xrange(size[1])]
 
 
 if __name__ == "__main__":

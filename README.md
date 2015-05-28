@@ -64,7 +64,7 @@ Examples
 
 >>> import numpy as np 
 
->>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
+>>> test_face = np.linspace(0,50,48*48).reshape(48,48)
 
 >>> fer(test_face)
 {u'Angry': 0.08843749137458341, u'Sad': 0.39091163159204684, u'Neutral': 0.1947947999669361, u'Surprise': 0.03443785859010413, u'Fear': 0.17574534848440568, u'Happy': 0.11567286999192382}

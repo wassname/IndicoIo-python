@@ -1,7 +1,6 @@
 import requests
-import numpy as np
 
-from indicoio.utils import api_handler
+from indicoio.utils import api_handler, image_preprocess
 import indicoio.config as config
 
 def fer(image, cloud=None, batch=False, api_key=None, **kwargs):
@@ -27,5 +26,5 @@ def fer(image, cloud=None, batch=False, api_key=None, **kwargs):
     :type image: list of lists
     :rtype: Dictionary containing emotion probability pairs
     """
-
+    image = image_preprocess(image, batch=batch)
     return api_handler(image, cloud=cloud, api="fer", batch=batch, api_key=api_key, **kwargs)

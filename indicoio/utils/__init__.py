@@ -28,7 +28,6 @@ def api_handler(arg, cloud, api, batch=False, api_key=None, **kwargs):
     url = url + "/batch" if batch else url
     url += "?key=%s" % api_key
 
-
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:
         raise Exception("Private cloud '%s' does not include api '%s'" % (cloud, api))

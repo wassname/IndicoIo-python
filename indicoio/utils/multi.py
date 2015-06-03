@@ -46,7 +46,7 @@ def handle_response(result):
         raise Exception("Sorry, %s API returned an unexpected response:\n%s" % (api, result[api]))
 
 
-def predict_text(input_text, apis, cloud=None, batch=False, api_key=None, **kwargs):
+def predict_text(input_text, apis=TEXT_APIS, cloud=None, batch=False, api_key=None, **kwargs):
     """
     Given input text, returns the results of specified text apis. Possible apis
     include: [ 'text_tags', 'political', 'sentiment', 'language' ]
@@ -80,7 +80,7 @@ def predict_text(input_text, apis, cloud=None, batch=False, api_key=None, **kwar
         **kwargs)
 
 
-def predict_image(image, apis, cloud=None, batch=False, api_key=None, **kwargs):
+def predict_image(image, apis=IMAGE_APIS, cloud=None, batch=False, api_key=None, **kwargs):
     """
     Given input image, returns the results of specified image apis. Possible apis
     include: ['fer', 'facial_features', 'image_features']

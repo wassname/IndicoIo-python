@@ -107,6 +107,8 @@ def image_preprocess(image, size=(48,48), batch=False):
             DeprecationWarning
         )
         outImage = process_list_image(image)
+    elif isinstance(image, Image.Image):
+        outImage = image
     elif type(image).__name__ == "ndarray": # image is from numpy/scipy
         out_image = Image.fromarray(image)
     else:

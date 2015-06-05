@@ -126,22 +126,22 @@ class BatchAPIRun(unittest.TestCase):
         test_data = [generate_array((48,48))]
         response = batch_predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
 
-        self.assertTrue(isinstance(response, list))
-        self.assertTrue(set(response[0].keys()) == set(config.IMAGE_APIS))
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
 
     def test_batch_multi_api_text(self):
         test_data = ['clearly an english sentence']
         response = batch_predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
 
-        self.assertTrue(isinstance(response, list))
-        self.assertTrue(set(response[0].keys()) == set(config.TEXT_APIS))
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
 
     def test_default_multi_api_text(self):
         test_data = ['clearly an english sentence']
         response = batch_predict_text(test_data, api_key=self.api_key)
 
-        self.assertTrue(isinstance(response, list))
-        self.assertTrue(set(response[0].keys()) == set(config.TEXT_APIS))
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
 
     def test_multi_api_bad_api(self):
         self.assertRaises(ValueError,

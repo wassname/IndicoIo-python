@@ -28,10 +28,6 @@ def multi(data, type, apis, available, batch=False, **kwargs):
     # Convert client api names to server names before sending request
     apis = map(CLIENT_SERVER_MAP.get, apis)
     result = api_handler(data, apis=apis, batch=batch, **kwargs)
-
-    if batch:
-        return [handle_response(each) for each in result]
-
     return handle_response(result)
 
 def handle_response(result):

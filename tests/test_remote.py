@@ -62,6 +62,12 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
+    def test_batch_fer_pil_image(self):
+        test_data = [Image.open(os.path.normpath(os.path.join(DIR, "data/fear.png")))]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
     def test_batch_fer_nonexistant_filepath(self):
         test_data = ["data/unhappy.png"]
         self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
@@ -180,6 +186,12 @@ class FullAPIRun(unittest.TestCase):
 
     def test_happy_fer(self):
         test_face = self.load_image("data/happy.png", as_grey=True)
+        response = fer(test_face)
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(response['Happy'] > 0.5)
+
+    def test_happy_fer_pil(self):
+        test_face = Image.open(os.path.normpath(os.path.join(DIR, "data/happy.png"))).convert('L');
         response = fer(test_face)
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(response['Happy'] > 0.5)

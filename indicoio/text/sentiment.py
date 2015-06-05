@@ -26,7 +26,7 @@ def political(text, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: Dictionary of party probability pairs
     """
 
-    return api_handler(text, cloud=cloud, api="political", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(text, cloud=cloud, api="political", url_params={"batch":batch, "api_key":api_key}, **kwargs)
 
 def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -49,4 +49,4 @@ def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: Float
     """
 
-    return api_handler(text, cloud=cloud, api="sentiment", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(text, cloud=cloud, api="sentiment", url_params={"batch":batch, "api_key":api_key}, **kwargs)

@@ -8,7 +8,7 @@ from indicoio import config
 B64_PATTERN = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)")
 
 
-def api_handler(arg, cloud, api, batch=False, api_key=None, **kwargs):
+def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, **kwargs):
     data = {'data': arg}
     data.update(**kwargs)
     json_data = json.dumps(data)
@@ -21,12 +21,11 @@ def api_handler(arg, cloud, api, batch=False, api_key=None, **kwargs):
         # default to indico public cloud
         host = config.PUBLIC_API_HOST
 
-    if not api_key:
-        api_key = config.api_key
-
     url = config.url_protocol + "//%s/%s" % (host, api)
-    url = url + "/batch" if batch else url
-    url += "?key=%s" % api_key
+    url = url + "/batch" if url_params.get("batch", False) else url
+    url += "?key=%s" % (url_params.get("api_key", None) or config.api_key)
+    if "apis" in url_params:
+        url += "&apis=%s" % ",".join(url_params["apis"])
 
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:

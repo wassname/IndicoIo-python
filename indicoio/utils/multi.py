@@ -33,7 +33,7 @@ def multi(data, type, apis, available, batch=False, **kwargs):
 
 def handle_response(result):
     # Parse out the results to a dicionary of api: result
-    return dict((SERVER_CLIENT_MAP[api], parsed_response(res))
+    return dict((SERVER_CLIENT_MAP[api], parsed_response(api, res))
         for api, res in result.iteritems())
 
 

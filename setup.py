@@ -1,6 +1,8 @@
 """
 Setup for indico apis
 """
+from indicoio import VERSION
+
 try:
     from setuptools import setup
 except ImportError:
@@ -8,7 +10,7 @@ except ImportError:
 
 setup(
     name="IndicoIo",
-    version='0.7.0',
+    version=VERSION,
     packages=[
         "indicoio",
         "indicoio.text",

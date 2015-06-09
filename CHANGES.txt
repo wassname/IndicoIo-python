@@ -23,3 +23,4 @@ v0.5.1, Friday Feb 27 -- More README updates, fixed rst formatting issue, added 
 v0.5.2, Tue March 7 -- Required API keys, configuration settings
 v0.5.3, Wed Apr 15 -- Added scipy to requirements, edited Readme to not break pypi page
 v0.6.0, Thu May 29 -- Remove numpy / scipy dependency in favor of Pillow
+v0.7.0, Tue Jun 9 -- Added support for calling multiple APIs in a single function and accepting filenames as image API inputs

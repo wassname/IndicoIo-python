@@ -1,13 +1,13 @@
 from functools import partial
 
+Version, version, __version__, VERSION = ('0.7.0',) * 4
+
 JSON_HEADERS = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
     'client-lib': 'python',
-    'version-number': '0.7.0'
+    'version-number': VERSION
 }
-
-Version, version, __version__, VERSION = ('0.7.0',) * 4
 
 from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment

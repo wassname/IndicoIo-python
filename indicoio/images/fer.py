@@ -27,4 +27,4 @@ def fer(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: Dictionary containing emotion probability pairs
     """
     image = image_preprocess(image, batch=batch)
-    return api_handler(image, cloud=cloud, api="fer", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(image, cloud=cloud, api="fer", url_params={"batch":batch, "api_key":api_key}, **kwargs)

@@ -9,6 +9,7 @@ from indicoio import config
 from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
 from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
+from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -112,6 +113,58 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_language(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
+
+    def test_multi_api_image(self):
+        test_data = generate_array((48,48))
+        response = predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
+
+    def test_multi_api_text(self):
+        test_data = 'clearly an english sentence'
+        response = predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
+    def test_batch_multi_api_image(self):
+        test_data = [generate_array((48,48))]
+        response = batch_predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
+
+    def test_batch_multi_api_text(self):
+        test_data = ['clearly an english sentence']
+        response = batch_predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
+    def test_default_multi_api_text(self):
+        test_data = ['clearly an english sentence']
+        response = batch_predict_text(test_data, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
+    def test_multi_api_bad_api(self):
+        self.assertRaises(ValueError,
+                          batch_predict_text,
+                          "this shouldn't work",
+                          apis=["sentiment", "somethingbad"])
+
+    def test_multi_bad_mixed_api(self):
+        self.assertRaises(ValueError,
+                            predict_text,
+                            "this shouldn't work",
+                            apis=["fer", "sentiment", "facial_features"])
+    def test_batch_multi_bad_mixed_api(self):
+        self.assertRaises(ValueError,
+                            batch_predict_text,
+                            ["this shouldn't work"],
+                            apis=["fer", "sentiment", "facial_features"])
 
     def test_batch_set_cloud(self):
         test_data = ['clearly an english sentence']

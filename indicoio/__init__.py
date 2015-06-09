@@ -4,10 +4,10 @@ JSON_HEADERS = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
     'client-lib': 'python',
-    'version-number': '0.6.0'
+    'version-number': '0.7.0'
 }
 
-Version, version, __version__, VERSION = ('0.6.0',) * 4
+Version, version, __version__, VERSION = ('0.7.0',) * 4
 
 from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment

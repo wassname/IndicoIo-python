@@ -15,7 +15,7 @@ pip install indicoio
 
 From source:
 ```bash
-git clone https://github.com/IndicoDataSolutions/IndicoIo-python.git 
+git clone https://github.com/IndicoDataSolutions/IndicoIo-python.git
 python setup.py install
 ```
 
@@ -62,7 +62,7 @@ Examples
 >>> text_tags(test_text, top_n=1) # return only keys with top_n values
 {u'startups_and_entrepreneurship': 0.21888586688354486}
 
->>> import numpy as np 
+>>> import numpy as np
 
 >>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
 

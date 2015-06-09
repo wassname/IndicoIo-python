@@ -1,4 +1,5 @@
 from indicoio.config import TEXT_APIS, IMAGE_APIS, API_NAMES
+from indicoio.utils.errors import IndicoError
 from indicoio.utils import api_handler
 
 
@@ -22,7 +23,7 @@ def multi(data, type, apis, available, batch=False, **kwargs):
     # Client side api name checking - strictly only accept func name api
     invalid_apis = [api for api in apis if api not in available]
     if invalid_apis:
-        raise ValueError("%s are not valid %s APIs. Please reference the available APIs below:\n%s"
+        raise IndicoError("%s are not valid %s APIs. Please reference the available APIs below:\n%s"
                             % (", ".join(invalid_apis), type, ", ".join(available))
                         )
     # Convert client api names to server names before sending request
@@ -31,15 +32,9 @@ def multi(data, type, apis, available, batch=False, **kwargs):
     return handle_response(result)
 
 def handle_response(result):
-    try:
-        # Parse out the results to a dicionary of api: result
-        return dict((SERVER_CLIENT_MAP[api], parsed_response(res))
-            for api, res in result.iteritems())
-    except KeyError:
-        for api in result:
-            if "error" in result[api]:
-                raise ValueError(result[api]["error"])
-        raise Exception("Sorry, %s API returned an unexpected response:\n%s" % (api, result[api]))
+    # Parse out the results to a dicionary of api: result
+    return dict((SERVER_CLIENT_MAP[api], parsed_response(res))
+        for api, res in result.iteritems())
 
 
 def predict_text(input_text, apis=TEXT_APIS, cloud=None, batch=False, api_key=None, **kwargs):
@@ -110,8 +105,11 @@ def predict_image(image, apis=IMAGE_APIS, cloud=None, batch=False, api_key=None,
         apis=apis,
         **kwargs)
 
-def parsed_response(response):
-    result = response.get('results') or response.get('error', False)
+def parsed_response(api, response):
+    result = response.get('results', False)
     if result:
         return result
-    raise KeyError
+    raise IndicoError(
+        "Sorry, the %s API returned an unexpected response.\n\t%s"
+        % (api, response.get('error', ""))
+    )

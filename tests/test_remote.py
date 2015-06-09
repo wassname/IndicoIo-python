@@ -134,7 +134,6 @@ class BatchAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
-        self.assertTrue("results" in response["fer"])
 
 
     def test_batch_multi_api_text(self):
@@ -143,7 +142,6 @@ class BatchAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
-        self.assertTrue("results" in response["sentiment"])
 
     def test_default_multi_api_text(self):
         test_data = ['clearly an english sentence']

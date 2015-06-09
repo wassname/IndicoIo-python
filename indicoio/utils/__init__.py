@@ -2,6 +2,7 @@ import inspect, json, getpass, os.path, base64, StringIO, re, warnings
 import requests
 from PIL import Image
 
+from indicoio.utils.errors import IndicoError
 from indicoio import JSON_HEADERS
 from indicoio import config
 
@@ -29,13 +30,13 @@ def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, *
 
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:
-        raise Exception("Private cloud '%s' does not include api '%s'" % (cloud, api))
+        raise IndicoError("Private cloud '%s' does not include api '%s'" % (cloud, api))
 
     json_results = response.json()
     results = json_results.get('results', False)
     if results is False:
         error = json_results.get('error')
-        raise ValueError(error)
+        raise IndicoError(error)
     return results
 
 
@@ -97,7 +98,7 @@ def image_preprocess(image, size=(48,48), batch=False):
         elif B64_PATTERN.match(b64_str) is not None:
             return b64_str
         else:
-            raise ValueError("Snose tring provided must be a valid filepath or base64 encoded string")
+            raise IndicoError("Snose tring provided must be a valid filepath or base64 encoded string")
 
     elif isinstance(image, list): # image passed in is a list and not np.array
         warnings.warn(
@@ -110,7 +111,7 @@ def image_preprocess(image, size=(48,48), batch=False):
     elif type(image).__name__ == "ndarray": # image is from numpy/scipy
         out_image = Image.fromarray(image)
     else:
-        raise ValueError("Image must be a filepath, base64 encoded string, or a numpy array")
+        raise IndicoError("Image must be a filepath, base64 encoded string, or a numpy array")
 
     # image resizing
     outImage = outImage.resize(size)

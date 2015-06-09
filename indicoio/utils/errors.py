@@ -1,0 +1,2 @@
+class IndicoError(ValueError):
+    pass

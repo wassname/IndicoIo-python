@@ -1,6 +1,6 @@
 from indicoio.config import TEXT_APIS, IMAGE_APIS, API_NAMES
 from indicoio.utils.errors import IndicoError
-from indicoio.utils import api_handler
+from indicoio.utils import api_handler, image_preprocess
 
 
 CLIENT_SERVER_MAP = dict((api, api.strip().replace("_", "").lower()) for api in API_NAMES)
@@ -96,7 +96,7 @@ def predict_image(image, apis=IMAGE_APIS, cloud=None, batch=False, api_key=None,
 
     return multi(
         api="apis",
-        data=image,
+        data=image_preprocess(image, batch=batch),
         type="image",
         available=IMAGE_APIS,
         cloud=cloud,

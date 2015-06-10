@@ -1,4 +1,4 @@
-from indicoio.utils import api_handler
+from indicoio.utils.api import api_handler
 
 def political(text, cloud=None, batch=False, api_key=None, **kwargs):
     """

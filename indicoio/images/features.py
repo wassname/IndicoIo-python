@@ -1,6 +1,7 @@
 import requests
 
-from indicoio.utils import image_preprocess, api_handler
+from indicoio.utils.image import image_preprocess
+from indicoio.utils.api import api_handler
 
 def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     """

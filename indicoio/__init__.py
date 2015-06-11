@@ -1,13 +1,13 @@
 from functools import partial
 
+Version, version, __version__, VERSION = ('0.7.0',) * 4
+
 JSON_HEADERS = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
     'client-lib': 'python',
-    'version-number': '0.6.0'
+    'version-number': VERSION
 }
-
-Version, version, __version__, VERSION = ('0.6.0',) * 4
 
 from indicoio.text.sentiment import political, posneg
 from indicoio.text.sentiment import posneg as sentiment
@@ -16,18 +16,11 @@ from indicoio.text.tagging import text_tags
 from indicoio.images.fer import fer
 from indicoio.images.features import facial_features
 from indicoio.images.features import image_features
+from indicoio.utils.multi import predict_image, predict_text
 
-apis = [
-    'political',
-    'posneg',
-    'sentiment',
-    'language',
-    'fer',
-    'facial_features',
-    'image_features',
-    'text_tags'
-]
-apis = dict((api, globals().get(api)) for api in apis)
+from indicoio.config import API_NAMES
+
+apis = dict((api, globals().get(api)) for api in API_NAMES)
 
 for api in apis:
     globals()[api] = partial(apis[api])

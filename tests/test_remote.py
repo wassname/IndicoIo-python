@@ -9,6 +9,8 @@ from indicoio import config
 from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
 from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
+from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
+from indicoio.utils.errors import IndicoError
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -48,7 +50,7 @@ class BatchAPIRun(unittest.TestCase):
 
     def test_batch_fer_bad_b64(self):
         test_data = ["$bad#FI jeaf9(#0"]
-        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+        self.assertRaises(IndicoError, batch_fer, test_data, api_key=self.api_key)
 
     def test_batch_fer_good_b64(self):
         test_data = ["iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAg5JREFUeNrEV4uNgzAMpegGyAgZgQ3KBscIjMAGx03QEdqbgG5AOwG3AWwAnSCXqLZkuUkwhfYsvaLm5xc7sZ1dIhdtUVjsLZRFTvp+LSaLq8UZ/s+KMSbZCcY5RV9E4QQKHG7QtgeCGv4PFt8WpzkCcztu3TiL0eJgkQmsVFn0MK+LzYkRKEGpG1GDyZdKRdaolhAoJewXnJsO1jtKCFDlChZAFxyJj2PnBRU20KZg7oMlOAENijpi8hwmGkKkZW2GzONtVLA/DxHAhTO2I7MCVBSQ6nGDlEBJDhyVYiUBHXBxzQm0wE4FzPYsGs856dA9SAAP2oENzFYqR6iAFQpHIAUzO/nxnOgthF/lM3w/3U8KYXTwxG/1IgIulF+wPQUXDMl75UoJZIHstRWpaGb8IGYqwBoKlG/lgpzoUEBoj50p8QtVrmHgaaXyC/H3BFC+e9kGFlCB0CtBF7FifQ8D9zjQQHj0pdOM3F1pUBoFKdxtqkMClScHJCSDlSxhHSNRT5K+FaZnHglrz+AGoxZLKNLYH6s3CkkuyJlp58wviZ4PuSCWDXl5hmjZtxcSCGbDUD3gK7EMOZBLCETrgVBF5K0lI5bIZ0wfrYh8NWHIAiNTPHpuTOKpCes1VTFaiNaFdGwPfdmaqlj6LmjJbgoSSfUW74K3voz+/W0oIeB7HWu2s+dfx3N+eLX8CTAAwUmKjK/dHS4AAAAASUVORK5CYII="]
@@ -62,9 +64,15 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
+    def test_batch_fer_pil_image(self):
+        test_data = [Image.open(os.path.normpath(os.path.join(DIR, "data/fear.png")))]
+        response = batch_fer(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], dict))
+
     def test_batch_fer_nonexistant_filepath(self):
         test_data = ["data/unhappy.png"]
-        self.assertRaises(ValueError, batch_fer, test_data, api_key=self.api_key)
+        self.assertRaises(IndicoError, batch_fer, test_data, api_key=self.api_key)
 
 
     def test_batch_facial_features(self):
@@ -107,6 +115,45 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
 
+    def test_batch_multi_api_image(self):
+        test_data = [generate_array((48,48)), generate_int_array((48,48))]
+        response = batch_predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
+        self.assertTrue(isinstance(response["fer"], list))
+
+    def test_batch_multi_api_text(self):
+        test_data = ['clearly an english sentence']
+        response = batch_predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
+    def test_default_multi_api_text(self):
+        test_data = ['clearly an english sentence']
+        response = batch_predict_text(test_data, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
+    def test_multi_api_bad_api(self):
+        self.assertRaises(IndicoError,
+                          batch_predict_text,
+                          "this shouldn't work",
+                          apis=["sentiment", "somethingbad"])
+
+    def test_multi_bad_mixed_api(self):
+        self.assertRaises(IndicoError,
+                            predict_text,
+                            "this shouldn't work",
+                            apis=["fer", "sentiment", "facial_features"])
+    def test_batch_multi_bad_mixed_api(self):
+        self.assertRaises(IndicoError,
+                            batch_predict_text,
+                            ["this shouldn't work"],
+                            apis=["fer", "sentiment", "facial_features"])
+
     def test_batch_set_cloud(self):
         test_data = ['clearly an english sentence']
         self.assertRaises(ConnectionError,
@@ -117,6 +164,9 @@ class BatchAPIRun(unittest.TestCase):
 
 
 class FullAPIRun(unittest.TestCase):
+
+    def setUp(self):
+        self.api_key = config.api_key
 
     def load_image(self, relpath, as_grey=False):
         im = Image.open(os.path.normpath(os.path.join(DIR, relpath))).convert('L');
@@ -178,8 +228,22 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
 
+    def test_good_int_array_fer(self):
+        fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
+        test_face = generate_int_array((48,48))
+        response = fer(test_face)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertEqual(fer_set, set(response.keys()))
+
     def test_happy_fer(self):
         test_face = self.load_image("data/happy.png", as_grey=True)
+        response = fer(test_face)
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(response['Happy'] > 0.5)
+
+    def test_happy_fer_pil(self):
+        test_face = Image.open(os.path.normpath(os.path.join(DIR, "data/happy.png"))).convert('L');
         response = fer(test_face)
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(response['Happy'] > 0.5)
@@ -200,6 +264,15 @@ class FullAPIRun(unittest.TestCase):
 
     def test_good_facial_features(self):
         test_face = generate_array((48,48))
+        response = facial_features(test_face)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 48)
+        self.check_range(response)
+
+    def test_good_int_array_facial_features(self):
+        fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
+        test_face = generate_int_array((48,48))
         response = facial_features(test_face)
 
         self.assertTrue(isinstance(response, list))
@@ -231,6 +304,21 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertEqual(len(response), 2048)
         self.check_range(response)
+
+    def test_multi_api_image(self):
+        test_data = generate_array((48,48))
+        response = predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
+
+    def test_multi_api_text(self):
+        test_data = 'clearly an english sentence'
+        response = predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+
+        self.assertTrue(isinstance(response, dict))
+        self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
+
 
     def test_language(self):
         language_set = set([
@@ -297,7 +385,7 @@ class FullAPIRun(unittest.TestCase):
 
     def test_set_api_key(self):
         test_data = 'clearly an english sentence'
-        self.assertRaises(ValueError,
+        self.assertRaises(IndicoError,
                           language,
                           test_data,
                           api_key ='invalid_api_key')
@@ -306,7 +394,7 @@ class FullAPIRun(unittest.TestCase):
         config.api_key = 'invalid_api_key'
 
         self.assertEqual(config.api_key, 'invalid_api_key')
-        self.assertRaises(ValueError,
+        self.assertRaises(IndicoError,
                           language,
                           test_data)
 
@@ -322,6 +410,9 @@ def flatten(container):
 
 def generate_array(size):
     return [[random.random() for _ in xrange(size[0])] for _ in xrange(size[1])]
+
+def generate_int_array(size):
+    return [[random.randint(0, 50) for _ in xrange(size[0])] for _ in xrange(size[1])]
 
 
 if __name__ == "__main__":

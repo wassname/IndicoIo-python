@@ -45,11 +45,26 @@ class Settings(ConfigParser.ConfigParser):
             None
         )
 
+TEXT_APIS = [
+    'text_tags',
+    'political',
+    'sentiment',
+    'language'
+]
+
+IMAGE_APIS = [
+    'fer',
+    'facial_features',
+    'image_features'
+]
+
+API_NAMES = IMAGE_APIS + TEXT_APIS + ["predict_text", "predict_image"]
 
 SETTINGS = Settings(files=[
     os.path.expanduser("~/.indicorc"),
     os.path.join(os.getcwd(), '.indicorc')
 ])
+
 api_key = SETTINGS.api_key()
 cloud = SETTINGS.cloud()
 PUBLIC_API_HOST = 'apiv2.indico.io'

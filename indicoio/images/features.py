@@ -1,6 +1,7 @@
 import requests
 
-from indicoio.utils import image_preprocess, api_handler
+from indicoio.utils.image import image_preprocess
+from indicoio.utils.api import api_handler
 
 def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -25,7 +26,7 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing feature responses
     """
     image = image_preprocess(image, batch=batch)
-    return api_handler(image, cloud=cloud, api="facialfeatures", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(image, cloud=cloud, api="facialfeatures", url_params={"batch":batch, "api_key":api_key}, **kwargs)
 
 def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -58,4 +59,4 @@ def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing features
     """
     image = image_preprocess(image, batch=batch, size=(64,64))
-    return api_handler(image, cloud=cloud, api="imagefeatures", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(image, cloud=cloud, api="imagefeatures", url_params={"batch":batch, "api_key":api_key}, **kwargs)

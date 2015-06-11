@@ -1,4 +1,4 @@
-from indicoio.utils import api_handler
+from indicoio.utils.api import api_handler
 import indicoio.config as config
 
 def language(text, cloud=None, batch=False, api_key=None, **kwargs):
@@ -24,4 +24,4 @@ def language(text, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: Dictionary of language probability pairs
     """
 
-    return api_handler(text, cloud=cloud, api="language", batch=batch, api_key=api_key, **kwargs)
+    return api_handler(text, cloud=cloud, api="language", url_params={"batch":batch, "api_key":api_key}, **kwargs)

@@ -26,7 +26,8 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing feature responses
     """
     image = image_preprocess(image, batch=batch)
-    return api_handler(image, cloud=cloud, api="facialfeatures", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(image, cloud=cloud, api="facialfeatures", url_params=url_params, **kwargs)
 
 def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -59,4 +60,5 @@ def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing features
     """
     image = image_preprocess(image, batch=batch, size=(64,64))
-    return api_handler(image, cloud=cloud, api="imagefeatures", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(image, cloud=cloud, api="imagefeatures", url_params=url_params, **kwargs)

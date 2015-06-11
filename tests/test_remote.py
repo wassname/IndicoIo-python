@@ -9,6 +9,7 @@ from indicoio import config
 from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
 from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
+from indicoio import sentiment_hq, batch_sentiment_hq
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
 
@@ -36,6 +37,13 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_sentiment(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0] < 0.5)
+
+    # TODO: uncomment once the high quality sentiment API is publicly released
+    # def test_batch_sentiment_hq(self):
+    #     test_data = ['Worst song ever', 'Best song ever']
+    #     response = batch_sentiment_hq(test_data, api_key=self.api_key)
+    #     self.assertTrue(isinstance(response, list))
+    #     self.assertTrue(response[0] < 0.5)
 
     def test_batch_political(self):
         test_data = ["Guns don't kill people, people kill people."]
@@ -219,6 +227,19 @@ class FullAPIRun(unittest.TestCase):
         response = sentiment(test_string)
         self.assertTrue(isinstance(response, float))
         self.assertTrue(response > 0.5)
+
+    # TODO: uncomment when the high quality sentiment API is publicly released
+    # def test_sentiment_hq(self):
+    #     test_string = "Worst song ever."
+    #     response = sentiment_hq(test_string)
+
+    #     self.assertTrue(isinstance(response, float))
+    #     self.assertTrue(response < 0.5)
+
+    #     test_string = "Best song ever."
+    #     response = sentiment_hq(test_string)
+    #     self.assertTrue(isinstance(response, float))
+    #     self.assertTrue(response > 0.5)
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])

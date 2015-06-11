@@ -17,6 +17,7 @@ def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, *
 
     if cloud:
         host = "%s.indico.domains" % cloud
+
     else:
         # default to indico public cloud
         host = config.PUBLIC_API_HOST
@@ -24,8 +25,14 @@ def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, *
     url = config.url_protocol + "//%s/%s" % (host, api)
     url = url + "/batch" if url_params.get("batch", False) else url
     url += "?key=%s" % (url_params.get("api_key", None) or config.api_key)
-    if "apis" in url_params:
-        url += "&apis=%s" % ",".join(url_params["apis"])
+    apis = url_params.get("apis", [])
+    if apis:
+        url += "&apis=%s" % ",".join(apis)
+
+    # private beta
+    if host == config.PUBLIC_API_HOST:
+        if (api == 'sentimenthq') or ('sentimenthq' in apis):
+            raise IndicoError("The high quality sentiment API is currently in private beta.")
 
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:

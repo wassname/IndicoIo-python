@@ -1,6 +1,6 @@
 from functools import partial
 
-Version, version, __version__, VERSION = ('0.7.0',) * 4
+Version, version, __version__, VERSION = ('0.7.1',) * 4
 
 JSON_HEADERS = {
     'Content-type': 'application/json',
@@ -9,7 +9,7 @@ JSON_HEADERS = {
     'version-number': VERSION
 }
 
-from indicoio.text.sentiment import political, posneg
+from indicoio.text.sentiment import political, posneg, sentiment_hq
 from indicoio.text.sentiment import posneg as sentiment
 from indicoio.text.lang import language
 from indicoio.text.tagging import text_tags

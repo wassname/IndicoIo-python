@@ -49,7 +49,8 @@ TEXT_APIS = [
     'text_tags',
     'political',
     'sentiment',
-    'language'
+    'language',
+    'sentiment_hq'
 ]
 
 IMAGE_APIS = [

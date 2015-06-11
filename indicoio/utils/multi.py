@@ -11,6 +11,9 @@ AVAILABLE_APIS = {
     'image': IMAGE_APIS
 }
 
+# TODO: remove this line when sentiment_hq is released publicly
+AVAILABLE_APIS['text'].remove('sentiment_hq')
+
 def multi(data, datatype, apis, batch=False, **kwargs):
     """
     Helper to make multi requests of different types.

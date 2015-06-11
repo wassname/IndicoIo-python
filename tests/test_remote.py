@@ -13,9 +13,6 @@ from indicoio import sentiment_hq, batch_sentiment_hq
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
 
-# TODO: remove once sentiment_hq is added to the public API
-config.TEXT_APIS.remove("sentiment_hq")
-
 DIR = os.path.dirname(os.path.realpath(__file__))
 
 class BatchAPIRun(unittest.TestCase):

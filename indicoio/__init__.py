@@ -9,7 +9,7 @@ JSON_HEADERS = {
     'version-number': VERSION
 }
 
-from indicoio.text.sentiment import political, posneg
+from indicoio.text.sentiment import political, posneg, sentiment_hq
 from indicoio.text.sentiment import posneg as sentiment
 from indicoio.text.lang import language
 from indicoio.text.tagging import text_tags

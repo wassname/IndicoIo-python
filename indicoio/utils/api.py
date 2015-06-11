@@ -17,9 +17,14 @@ def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, *
 
     if cloud:
         host = "%s.indico.domains" % cloud
+
     else:
         # default to indico public cloud
         host = config.PUBLIC_API_HOST
+
+        # error message for public cloud
+        if api == 'sentimenthq':
+            raise IndicoError("The high quality sentiment API is currently in private beta.")
 
     url = config.url_protocol + "//%s/%s" % (host, api)
     url = url + "/batch" if url_params.get("batch", False) else url

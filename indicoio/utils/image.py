@@ -22,7 +22,7 @@ def image_preprocess(image, size=(48,48), batch=False):
         b64_str = re.sub('^data:image/.+;base64,', '', image)
         if os.path.isfile(image):
             # check type of element
-            outImage = Image.open(image)
+            out_image = Image.open(image)
         elif B64_PATTERN.match(b64_str) is not None:
             return b64_str
         else:
@@ -33,20 +33,26 @@ def image_preprocess(image, size=(48,48), batch=False):
             "Input as lists of pixels will be deprecated in the next major update",
             DeprecationWarning
         )
-        outImage = process_list_image(image)
+        out_image = process_list_image(image)
     elif isinstance(image, Image.Image):
-        outImage = image
+        out_image = image
     elif type(image).__name__ == "ndarray": # image is from numpy/scipy
-        out_image = Image.fromarray(image)
+        if "float" in str(image.dtype) and image.min() > 0 and image.max() < 1:
+            image *= 255
+        try:
+            out_image = Image.fromarray(image.astype("uint8"))
+        except TypeError as e:
+            raise IndicoError("Please ensure the numpy array is acceptable by PIL. Values must be between 0 and 1 or between 0 and 255 in greyscale, rgb, or rgba format.")
+
     else:
         raise IndicoError("Image must be a filepath, base64 encoded string, or a numpy array")
 
     # image resizing
-    outImage = outImage.resize(size)
+    out_image = out_image.resize(size)
 
     # convert to base64
     temp_output = StringIO.StringIO()
-    outImage.save(temp_output, format='PNG')
+    out_image.save(temp_output, format='PNG')
     temp_output.seek(0)
     output_s = temp_output.read()
 
@@ -87,7 +93,7 @@ def process_list_image(_list):
 
     seq_obj = []
 
-    outImage = Image.new("RGB", (dimens[0], dimens[1]))
+    out_image = Image.new("RGB", (dimens[0], dimens[1]))
     for i in xrange(dimens[0]):
         for j in xrange(dimens[1]):
             elem = _list[i][j]
@@ -105,6 +111,6 @@ def process_list_image(_list):
                 seq_obj.append((elem, ) * 3)
 
     #Needs to be 0 - 255 in flattened list of (R, G, B)
-    outImage.putdata(data = seq_obj)
+    out_image.putdata(data = seq_obj)
 
-    return outImage
+    return out_image

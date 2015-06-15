@@ -421,6 +421,75 @@ class FullAPIRun(unittest.TestCase):
 
         config.api_key = temp_api_key
 
+
+class NumpyImagesRun(FullAPIRun):
+    """
+    Testing numpy array as images
+    """
+    def setUp(self):
+        self.api_key = config.api_key
+        try:
+            import numpy as np
+            globals()["np"] = np
+        except ImportError:
+            self.skipTest("Numpy is not installed!")
+
+    def test_float_numpy_arrays(self):
+        test_image = np.random.random(size=(48,48))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_float_RGB_numpy_arrays(self):
+        test_image = np.random.random(size=(48,48,3))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_float_RGBA_numpy_arrays(self):
+        test_image = np.random.random(size=(48,48,4))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_int_numpy_arrays(self):
+        test_image = np.random.randint(0, 255, size=(48,48))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_int_RGB_numpy_arrays(self):
+        test_image = np.random.randint(0, 255, size=(48,48, 3))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_int_RGBA_numpy_arrays(self):
+        test_image = np.random.randint(0, 255, size=(48,48, 3))
+        response = image_features(test_image)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 2048)
+        self.check_range(response)
+
+    def test_invalid_int_numpy_arrays(self):
+        test_image = np.random.randint(255, 300, size=(48,48, 3))
+        self.assertRaises(IndicoError, image_features, test_image)
+
+    def test_invalid_int_numpy_arrays(self):
+        test_image = np.random.randint(255, 300, size=(48,48, 5))
+        self.assertRaises(IndicoError, image_features, test_image)
+
 def flatten(container):
     for i in container:
         if isinstance(i, list) or isinstance(i, tuple):

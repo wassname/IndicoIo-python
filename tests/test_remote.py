@@ -291,6 +291,14 @@ class FullAPIRun(unittest.TestCase):
         self.assertEqual(len(response), 48)
         self.check_range(response)
 
+    def test_rgba_int_array_facial_features(self):
+        test_face = generate_rgba_int_array((48, 48))
+        response = facial_features(test_face)
+
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), 48)
+        self.check_range(response)
+
     def test_good_int_array_facial_features(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
         test_face = generate_int_array((48,48))
@@ -502,7 +510,10 @@ def generate_array(size):
     return [[random.random() for _ in xrange(size[0])] for _ in xrange(size[1])]
 
 def generate_int_array(size):
-    return [[random.randint(0, 50) for _ in xrange(size[0])] for _ in xrange(size[1])]
+    return [[random.randint(0, 255) for _ in xrange(size[0])] for _ in xrange(size[1])]
+
+def generate_rgba_int_array(size):
+    return [[[random.randint(0, 255) for _ in xrange(3)] for _ in xrange(size[0])] for _ in xrange(size[1])]
 
 
 if __name__ == "__main__":

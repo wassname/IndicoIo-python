@@ -37,8 +37,8 @@ def image_preprocess(image, size=(48,48), batch=False):
     elif isinstance(image, Image.Image):
         out_image = image
     elif type(image).__name__ == "ndarray": # image is from numpy/scipy
-        if "float" in str(image.dtype) and image.min() > 0 and image.max() < 1:
-            image *= 255
+        if "float" in str(image.dtype) and image.min() >= 0 and image.max() <= 1:
+            image *= 255.
         try:
             out_image = Image.fromarray(image.astype("uint8"))
         except TypeError as e:
@@ -102,7 +102,7 @@ def process_list_image(_list):
                 if data_type == float:
                     seq_obj.append((int(elem[0] * 255), int(elem[1] * 255), int(elem[2] * 255)))
                 else:
-                    seq_obj.append(elem[0:3])
+                    seq_obj.append(tuple(elem[0:3]))
             elif data_type == float:
                 #Grayscale 0 - 1.0f
                 seq_obj.append((int(elem * 255), ) * 3)

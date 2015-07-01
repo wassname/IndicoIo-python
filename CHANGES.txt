@@ -28,3 +28,4 @@ v0.7.1 Thu Jun 11 -- High quality sentiment API for private beta, fix for multi 
 v0.7.2 Thu Jun 11 -- Remove sentiment_hq from text apis by default
 v0.7.3 Wed Jun 17 -- Fixes for handling of specific image types
 v0.7.4 Mon Jun 22 -- Fix for setup.py issues
+v0.7.5 Wed Jul 1 -- Public access to sentimentHQ api

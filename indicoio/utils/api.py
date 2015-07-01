@@ -29,11 +29,6 @@ def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, *
     if apis:
         url += "&apis=%s" % ",".join(apis)
 
-    # private beta
-    if host == config.PUBLIC_API_HOST:
-        if (api == 'sentimenthq') or ('sentimenthq' in apis):
-            raise IndicoError("The high quality sentiment API is currently in private beta.")
-
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
     if response.status_code == 503 and cloud != None:
         raise IndicoError("Private cloud '%s' does not include api '%s'" % (cloud, api))

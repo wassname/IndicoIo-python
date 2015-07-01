@@ -214,7 +214,7 @@ class FullAPIRun(unittest.TestCase):
         response = political(test_string)
 
         self.assertTrue(isinstance(response, dict))
-        assert response['Liberal'] > 0.25
+        assert response['Libertarian'] > 0.25
 
     def test_posneg(self):
         test_string = "Worst song ever."

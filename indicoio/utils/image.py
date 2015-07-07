@@ -48,7 +48,8 @@ def image_preprocess(image, size=(48,48), batch=False):
         raise IndicoError("Image must be a filepath, base64 encoded string, or a numpy array")
 
     # image resizing
-    out_image = out_image.resize(size)
+    if size:
+        out_image = out_image.resize(size)
 
     # convert to base64
     temp_output = StringIO.StringIO()

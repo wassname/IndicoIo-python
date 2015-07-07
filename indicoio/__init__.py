@@ -18,6 +18,7 @@ from indicoio.text.ner import named_entities
 from indicoio.images.fer import fer
 from indicoio.images.features import facial_features
 from indicoio.images.features import image_features
+from indicoio.images.filtering import content_filtering
 from indicoio.utils.multi import predict_image, predict_text
 
 from indicoio.config import API_NAMES

@@ -50,7 +50,8 @@ TEXT_APIS = [
     'political',
     'sentiment',
     'language',
-    'sentiment_hq'
+    'sentiment_hq',
+    'keywords'
 ]
 
 IMAGE_APIS = [

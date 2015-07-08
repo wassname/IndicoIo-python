@@ -49,7 +49,7 @@ Examples
 
 .. code:: python
 
-    >>> from indicoio import political, sentiment, language, text_tags, fer, facial_features, image_features
+    >>> from indicoio import political, sentiment, language, text_tags, keywords, fer, facial_features, image_features
 
     >>> indicoio.config.api_key = "YOUR_API_KEY"
 
@@ -72,7 +72,7 @@ Examples
 
     >>> import numpy as np
 
-    >>> test_face = np.linspace(0,50,48*48).reshape(48,48).tolist()
+    >>> test_face = np.linspace(0,50,48*48).reshape(48,48)
 
     >>> fer(test_face)
     {u'Angry': 0.08843749137458341, u'Sad': 0.39091163159204684, u'Neutral': 0.1947947999669361, u'Surprise': 0.03443785859010413, u'Fear': 0.17574534848440568, u'Happy': 0.11567286999192382}
@@ -82,6 +82,11 @@ Examples
 
     >>> language('Quis custodiet ipsos custodes')
     {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
+
+    >>> keywords("Facebook blog posts about Android tech make better journalism than most news outlets.", top_n=3)
+    {u'android': 0.10602030910588661,
+     u'journalism': 0.13466866170166855,
+     u'outlets': 0.13930405357808642}
 
 Batch API
 ---------
@@ -131,3 +136,4 @@ Accepted image API names: ``fer, facial_features, image_features``
 
     >>> batch_predict_image([test_face, test_face], apis=["fer", "facial_features"])
     {'facial_features': [[0.0, -0.026176479280200796, 0.20707644777495776, ...], [0.0, -0.026176479280200796, 0.20707644777495776, ...]], 'fer': [{u'Angry': 0.08877494466353497, u'Sad': 0.3933999409104264, u'Neutral': 0.1910612654566151, u'Surprise': 0.0346146405941845, u'Fear': 0.17682159820518667, u'Happy': 0.11532761017005204}, { u'Angry': 0.08877494466353497, u'Sad': 0.3933999409104264, u'Neutral': 0.1910612654566151, u'Surprise': 0.0346146405941845, u'Fear': 0.17682159820518667, u'Happy': 0.11532761017005204}]}
+

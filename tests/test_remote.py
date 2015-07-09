@@ -35,8 +35,10 @@ class BatchAPIRun(unittest.TestCase):
 
     def test_batch_keywords(self):
         test_data = ["A working api is key to the success of our young company"]
+        words = [set(text.lower().split()) for text in test_data]
         response = batch_keywords(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
+        self.assertTrue(set(response[0].keys()).issubset(words[0]))
 
     def test_batch_posneg(self):
         test_data = ['Worst song ever', 'Best song ever']
@@ -209,9 +211,13 @@ class FullAPIRun(unittest.TestCase):
 
     def test_keywords(self):
         text = "A working api is key to the success of our young company"
+        words = set(text.lower().split())
 
         results = keywords(text)
-        assert 'api' in results.keys()
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+        assert 'api' in sorted_results[:3]
+
+        self.assertTrue(set(results.keys()).issubset(words))
 
         results = keywords(text, top_n=3)
         assert len(results) is 3
@@ -219,7 +225,6 @@ class FullAPIRun(unittest.TestCase):
         results = keywords(text, threshold=.1)
         for v in results.values():
             assert v >= .1
-
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

@@ -6,8 +6,8 @@ from requests import ConnectionError
 from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import config
-from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
-from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
+from indicoio import political, sentiment, fer, facial_features, content_filtering, language, image_features, text_tags
+from indicoio import batch_political, batch_sentiment, batch_fer, batch_content_filtering, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
 from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
@@ -63,6 +63,12 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_fer(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_content_filtering(self):
+        test_data = [generate_array((48,48))]
+        response = batch_content_filtering(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], float))
 
     def test_batch_fer_bad_b64(self):
         test_data = ["$bad#FI jeaf9(#0"]
@@ -323,6 +329,11 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
+
+    def test_safe_content_filtering(self):
+        test_face = self.load_image("data/happy.png", as_grey=True)
+        response = content_filtering(test_face)
+        self.assertTrue(response < 0.5)
 
     def test_good_facial_features(self):
         test_face = generate_array((48,48))

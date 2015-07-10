@@ -51,7 +51,8 @@ TEXT_APIS = [
     'sentiment',
     'language',
     'sentiment_hq',
-    'keywords'
+    'keywords',
+    'named_entities'
 ]
 
 IMAGE_APIS = [

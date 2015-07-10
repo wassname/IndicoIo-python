@@ -11,6 +11,7 @@ from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_f
 from indicoio import batch_language, batch_image_features, batch_text_tags
 from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
+from indicoio import named_entities, batch_named_entities
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
 
@@ -89,7 +90,6 @@ class BatchAPIRun(unittest.TestCase):
         test_data = ["data/unhappy.png"]
         self.assertRaises(IndicoError, batch_fer, test_data, api_key=self.api_key)
 
-
     def test_batch_facial_features(self):
         test_data = [generate_array((48,48))]
         response = batch_facial_features(test_data, api_key=self.api_key)
@@ -129,6 +129,15 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_language(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
+
+    def test_batch_named_entities(self):
+        batch = ["London Underground's boss Mike Brown warned that the strike ..."]
+        expected_entities = ("London Underground", "Mike Brown")
+        expected_keys = set(["categories", "confidence"])
+        entities = batch_named_entities(batch)[0]
+        for entity in expected_entities:
+            assert entity in expected_entities
+            assert not (set(entities[entity]) - expected_keys)
 
     def test_batch_multi_api_image(self):
         test_data = [generate_array((48,48)), generate_int_array((48,48))]
@@ -225,6 +234,15 @@ class FullAPIRun(unittest.TestCase):
         results = keywords(text, threshold=.1)
         for v in results.values():
             assert v >= .1
+
+    def test_named_entities(self):
+        text = "London Underground's boss Mike Brown warned that the strike ..."
+        expected_entities = ("London Underground", "Mike Brown")
+        expected_keys = set(["categories", "confidence"])
+        entities = named_entities(text)
+        for entity in expected_entities:
+            assert entity in expected_entities
+            assert not (set(entities[entity]) - expected_keys)
 
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])

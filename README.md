@@ -41,7 +41,7 @@ Supported APIs:
 Examples
 --------
 ```python
->>> from indicoio import political, sentiment, language, text_tags, fer, facial_features, image_features
+>>> from indicoio import political, sentiment, language, text_tags, keywords, fer, facial_features, image_features
 
 >>> indicoio.config.api_key = "YOUR_API_KEY"
 
@@ -74,6 +74,11 @@ Examples
 
 >>> language('Quis custodiet ipsos custodes')
 {u'Swedish': 0.00033330636691921914, u'Lithuanian': 0.007328693814717631, u'Vietnamese': 0.0002686116137658802, u'Romanian': 8.133913804076592e-06, ...}
+
+>>> keywords("Facebook blog posts about Android tech make better journalism than most news outlets.", top_n=3)
+{u'android': 0.10602030910588661,
+ u'journalism': 0.13466866170166855,
+ u'outlets': 0.13930405357808642}
 ```
 
 Batch API

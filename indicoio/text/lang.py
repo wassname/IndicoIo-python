@@ -23,5 +23,5 @@ def language(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Dictionary of language probability pairs
     """
-
-    return api_handler(text, cloud=cloud, api="language", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(text, cloud=cloud, api="language", url_params=url_params, **kwargs)

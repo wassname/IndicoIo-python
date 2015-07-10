@@ -50,13 +50,16 @@ TEXT_APIS = [
     'political',
     'sentiment',
     'language',
-    'sentiment_hq'
+    'sentiment_hq',
+    'keywords',
+    'named_entities'
 ]
 
 IMAGE_APIS = [
     'fer',
     'facial_features',
-    'image_features'
+    'image_features',
+    'content_filtering'
 ]
 
 API_NAMES = IMAGE_APIS + TEXT_APIS + ["predict_text", "predict_image"]

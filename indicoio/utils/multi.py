@@ -137,7 +137,7 @@ def predict_image(image, apis=IMAGE_APIS, **kwargs):
 
 def parsed_response(api, response):
     result = response.get('results', False)
-    if result:
+    if result != False:
         return result
     raise IndicoError(
         "Sorry, the %s API returned an unexpected response.\n\t%s"

@@ -6,10 +6,12 @@ from requests import ConnectionError
 from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import config
-from indicoio import political, sentiment, fer, facial_features, language, image_features, text_tags
-from indicoio import batch_political, batch_sentiment, batch_fer, batch_facial_features
+from indicoio import political, sentiment, fer, facial_features, content_filtering, language, image_features, text_tags
+from indicoio import batch_political, batch_sentiment, batch_fer, batch_content_filtering, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
+from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
+from indicoio import named_entities, batch_named_entities
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
 
@@ -32,18 +34,24 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_text_tags(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
 
+    def test_batch_keywords(self):
+        test_data = ["A working api is key to the success of our young company"]
+        words = [set(text.lower().split()) for text in test_data]
+        response = batch_keywords(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(set(response[0].keys()).issubset(words[0]))
+
     def test_batch_posneg(self):
         test_data = ['Worst song ever', 'Best song ever']
         response = batch_sentiment(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0] < 0.5)
 
-    # TODO: uncomment once the high quality sentiment API is publicly released
-    # def test_batch_sentiment_hq(self):
-    #     test_data = ['Worst song ever', 'Best song ever']
-    #     response = batch_sentiment_hq(test_data, api_key=self.api_key)
-    #     self.assertTrue(isinstance(response, list))
-    #     self.assertTrue(response[0] < 0.5)
+    def test_batch_sentiment_hq(self):
+        test_data = ['Worst song ever', 'Best song ever']
+        response = batch_sentiment_hq(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(response[0] < 0.5)
 
     def test_batch_political(self):
         test_data = ["Guns don't kill people, people kill people."]
@@ -55,6 +63,12 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_fer(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
+
+    def test_batch_content_filtering(self):
+        test_data = [generate_array((48,48))]
+        response = batch_content_filtering(test_data, api_key=self.api_key)
+        self.assertTrue(isinstance(response, list))
+        self.assertTrue(isinstance(response[0], float))
 
     def test_batch_fer_bad_b64(self):
         test_data = ["$bad#FI jeaf9(#0"]
@@ -81,7 +95,6 @@ class BatchAPIRun(unittest.TestCase):
     def test_batch_fer_nonexistant_filepath(self):
         test_data = ["data/unhappy.png"]
         self.assertRaises(IndicoError, batch_fer, test_data, api_key=self.api_key)
-
 
     def test_batch_facial_features(self):
         test_data = [generate_array((48,48))]
@@ -122,6 +135,15 @@ class BatchAPIRun(unittest.TestCase):
         response = batch_language(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(response[0]['English'] > 0.25)
+
+    def test_batch_named_entities(self):
+        batch = ["London Underground's boss Mike Brown warned that the strike ..."]
+        expected_entities = ("London Underground", "Mike Brown")
+        expected_keys = set(["categories", "confidence"])
+        entities = batch_named_entities(batch)[0]
+        for entity in expected_entities:
+            assert entity in expected_entities
+            assert not (set(entities[entity]) - expected_keys)
 
     def test_batch_multi_api_image(self):
         test_data = [generate_array((48,48)), generate_int_array((48,48))]
@@ -202,6 +224,32 @@ class FullAPIRun(unittest.TestCase):
         for v in results.values():
             assert v >= 0.1
 
+    def test_keywords(self):
+        text = "A working api is key to the success of our young company"
+        words = set(text.lower().split())
+
+        results = keywords(text)
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+        assert 'api' in sorted_results[:3]
+
+        self.assertTrue(set(results.keys()).issubset(words))
+
+        results = keywords(text, top_n=3)
+        assert len(results) is 3
+
+        results = keywords(text, threshold=.1)
+        for v in results.values():
+            assert v >= .1
+
+    def test_named_entities(self):
+        text = "London Underground's boss Mike Brown warned that the strike ..."
+        expected_entities = ("London Underground", "Mike Brown")
+        expected_keys = set(["categories", "confidence"])
+        entities = named_entities(text)
+        for entity in expected_entities:
+            assert entity in expected_entities
+            assert not (set(entities[entity]) - expected_keys)
+
     def test_political(self):
         political_set = set(['Libertarian', 'Liberal', 'Conservative', 'Green'])
         test_string = "Guns don't kill people, people kill people."
@@ -228,18 +276,17 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, float))
         self.assertTrue(response > 0.5)
 
-    # TODO: uncomment when the high quality sentiment API is publicly released
-    # def test_sentiment_hq(self):
-    #     test_string = "Worst song ever."
-    #     response = sentiment_hq(test_string)
+    def test_sentiment_hq(self):
+        test_string = "Worst song ever."
+        response = sentiment_hq(test_string)
 
-    #     self.assertTrue(isinstance(response, float))
-    #     self.assertTrue(response < 0.5)
+        self.assertTrue(isinstance(response, float))
+        self.assertTrue(response < 0.5)
 
-    #     test_string = "Best song ever."
-    #     response = sentiment_hq(test_string)
-    #     self.assertTrue(isinstance(response, float))
-    #     self.assertTrue(response > 0.5)
+        test_string = "Best song ever."
+        response = sentiment_hq(test_string)
+        self.assertTrue(isinstance(response, float))
+        self.assertTrue(response > 0.5)
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
@@ -282,6 +329,11 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
+
+    def test_safe_content_filtering(self):
+        test_face = self.load_image("data/happy.png", as_grey=True)
+        response = content_filtering(test_face)
+        self.assertTrue(response < 0.5)
 
     def test_good_facial_features(self):
         test_face = generate_array((48,48))

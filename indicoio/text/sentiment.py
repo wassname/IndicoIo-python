@@ -25,8 +25,8 @@ def political(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Dictionary of party probability pairs
     """
-
-    return api_handler(text, cloud=cloud, api="political", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(text, cloud=cloud, api="political", url_params=url_params, **kwargs)
 
 def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -48,8 +48,8 @@ def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Float
     """
-
-    return api_handler(text, cloud=cloud, api="sentiment", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(text, cloud=cloud, api="sentiment", url_params=url_params, **kwargs)
 
 def sentiment_hq(text, cloud=None, batch=False, api_key=None, **kwargs):
     """
@@ -71,5 +71,5 @@ def sentiment_hq(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Float
     """
-
-    return api_handler(text, cloud=cloud, api="sentimenthq", url_params={"batch":batch, "api_key":api_key}, **kwargs)
+    url_params = {"batch": batch, "api_key": api_key}
+    return api_handler(text, cloud=cloud, api="sentimenthq", url_params=url_params, **kwargs)

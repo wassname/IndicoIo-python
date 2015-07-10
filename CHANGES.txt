@@ -30,3 +30,4 @@ v0.7.3 Wed Jun 17 -- Fixes for handling of specific image types
 v0.7.4 Mon Jun 22 -- Fix for setup.py issues
 v0.7.5 Wed Jul 1 -- Public access to sentimentHQ api
 v0.7.6 Tue Jul 7 -- Add Keywords API
+v0.8.0 Fri Jul 10 -- Add Content Filtering API, Named Entities API, Facial Emotion with Localization

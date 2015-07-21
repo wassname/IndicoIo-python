@@ -8,12 +8,15 @@ from indicoio.utils.errors import IndicoError, DataStructureException
 from indicoio import JSON_HEADERS
 from indicoio import config
 
-def api_handler(arg, cloud, api, url_params = {"batch":False, "api_key":None}, **kwargs):
+def api_handler(arg, cloud, api, url_params=None, **kwargs):
+    if url_params is None:
+        url_params = {"api_key":None, batch:False }
+
     data = {'data': arg}
     data.update(**kwargs)
     json_data = json.dumps(data)
     if not cloud:
-        cloud=config.cloud
+        cloud = config.cloud
 
     if cloud:
         host = "%s.indico.domains" % cloud

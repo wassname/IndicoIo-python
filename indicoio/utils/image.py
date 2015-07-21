@@ -26,14 +26,8 @@ def image_preprocess(image, size=(48,48), batch=False):
         elif B64_PATTERN.match(b64_str) is not None:
             return b64_str
         else:
-            raise IndicoError("Snose tring provided must be a valid filepath or base64 encoded string")
+            raise IndicoError("String provided must be a valid filepath or base64 encoded string")
 
-    elif isinstance(image, list): # image passed in is a list and not np.array
-        warnings.warn(
-            "Input as lists of pixels will be deprecated in the next major update",
-            DeprecationWarning
-        )
-        out_image = process_list_image(image)
     elif isinstance(image, Image.Image):
         out_image = image
     elif type(image).__name__ == "ndarray": # image is from numpy/scipy
@@ -80,38 +74,3 @@ def get_element_type(_list, dimens):
         elem = elem[0]
     return type(elem)
 
-
-def process_list_image(_list):
-    """
-    Processes list to be [[(int, int, int), ...]]
-    """
-    # Check if list is empty
-    if not _list:
-        return _list
-
-    dimens = get_list_dimensions(_list)
-    data_type = get_element_type(_list, dimens)
-
-    seq_obj = []
-
-    out_image = Image.new("RGB", (dimens[0], dimens[1]))
-    for i in xrange(dimens[0]):
-        for j in xrange(dimens[1]):
-            elem = _list[i][j]
-            if len(dimens) >= 3:
-                #RGB(A)
-                if data_type == float:
-                    seq_obj.append((int(elem[0] * 255), int(elem[1] * 255), int(elem[2] * 255)))
-                else:
-                    seq_obj.append(tuple(elem[0:3]))
-            elif data_type == float:
-                #Grayscale 0 - 1.0f
-                seq_obj.append((int(elem * 255), ) * 3)
-            else:
-                #Grayscale 0 - 255
-                seq_obj.append((elem, ) * 3)
-
-    #Needs to be 0 - 255 in flattened list of (R, G, B)
-    out_image.putdata(data = seq_obj)
-
-    return out_image

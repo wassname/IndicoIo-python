@@ -336,6 +336,11 @@ class FullAPIRun(unittest.TestCase):
         response = content_filtering(test_face)
         self.assertTrue(response < 0.5)
 
+    def test_resize_content_filtering(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        response = content_filtering(test_face)
+        self.assertTrue(isinstance(response, float))
+
     def test_good_facial_features(self):
         test_face = os.path.normpath(os.path.join(DIR, "data/48by48.png"))
         response = facial_features(test_face)
@@ -550,6 +555,11 @@ class NumpyImagesRun(FullAPIRun):
     def test_invalid_int_numpy_arrays(self):
         test_image = np.random.randint(255, 300, size=(48,48, 5))
         self.assertRaises(IndicoError, image_features, test_image)
+
+    def test_resize_content_filtering_numpy_arrays(self):
+        test_image = np.random.randint(0, 255, size=(480,248, 3))
+        response = content_filtering(test_image)
+        self.assertTrue(isinstance(response, float))
 
 def flatten(container):
     for i in container:

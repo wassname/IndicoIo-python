@@ -83,11 +83,11 @@ Examples
 
 Batch API
 ---------
-Each `indicoio` function has a corresponding batch function for analyzing many examples with a single request. Simply pass in a list of inputs and receive a list of results in return.
+Each `indicoio` function can process many examples with a single request. Simply pass in a list of inputs and receive a list of results in return.
 ```python
->>> from indicoio import batch_sentiment
+>>> from indicoio import sentiment
 
->>> batch_sentiment(['Best day ever', 'Worst day ever'])
+>>> sentiment(['Best day ever', 'Worst day ever'])
 [0.9899001220871786, 0.005709885173415242]
 ```
 
@@ -101,12 +101,12 @@ Accepted text API names: `text_tags, political, sentiment, language`
 Accepted image API names: `fer, facial_features, image_features`
 
 ```python
->>> from indicoio import predict_text, predict_image, batch_predict_text, batch_predict_image
+>>> from indicoio import predict_text, predict_image, predict_text, predict_image
 
 >>> predict_text('Best day ever', apis=["sentiment", "language"])
 {'sentiment': 0.9899001220871786, 'language': {u'Swedish': 0.0022464881013042294, u'Vietnamese': 9.887170914498351e-05, ...}}
 
->>> batch_predict_text(['Best day ever', 'Worst day ever'], apis=["sentiment", "language"])
+>>> predict_text(['Best day ever', 'Worst day ever'], apis=["sentiment", "language"])
 {'sentiment': [0.9899001220871786, 0.005709885173415242], 'language': [{u'Swedish': 0.0022464881013042294, u'Vietnamese': 9.887170914498351e-05, u'Romanian': 0.00010661175919993216, ...}, {u'Swedish': 0.4924352805804646, u'Vietnamese': 0.028574824174911372, u'Romanian': 0.004185623723173551, u'Dutch': 0.000717033819689362, u'Korean': 0.0030093489153785826, ...}]}
 
 >>> import numpy as np
@@ -116,6 +116,6 @@ Accepted image API names: `fer, facial_features, image_features`
 >>> predict_image(test_face, apis=["fer", "facial_features"])
 {'facial_features': [0.0, -0.026176479280200796, 0.20707644777495776, ...], 'fer': {u'Angry': 0.08877494466353497, u'Sad': 0.3933999409104264, u'Neutral': 0.1910612654566151, u'Surprise': 0.0346146405941845, u'Fear': 0.17682159820518667, u'Happy': 0.11532761017005204}}
 
->>> batch_predict_image([test_face, test_face], apis=["fer", "facial_features"])
+>>> predict_image([test_face, test_face], apis=["fer", "facial_features"])
 {'facial_features': [[0.0, -0.026176479280200796, 0.20707644777495776, ...], [0.0, -0.026176479280200796, 0.20707644777495776, ...]], 'fer': [{u'Angry': 0.08877494466353497, u'Sad': 0.3933999409104264, u'Neutral': 0.1910612654566151, u'Surprise': 0.0346146405941845, u'Fear': 0.17682159820518667, u'Happy': 0.11532761017005204}, { u'Angry': 0.08877494466353497, u'Sad': 0.3933999409104264, u'Neutral': 0.1910612654566151, u'Surprise': 0.0346146405941845, u'Fear': 0.17682159820518667, u'Happy': 0.11532761017005204}]}
 ```

@@ -31,4 +31,5 @@ v0.7.4 Mon Jun 22 -- Fix for setup.py issues
 v0.7.5 Wed Jul 1 -- Public access to sentimentHQ api
 v0.7.6 Tue Jul 7 -- Add Keywords API
 v0.8.0 Fri Jul 10 -- Add Content Filtering API, Named Entities API, Facial Emotion with Localization
-v0.8.1 Wed Fri 22 -- Add Sentiment HQ to predict_text API
+v0.8.1 Wed Jul 22 -- Add Sentiment HQ to predict_text API
+v0.9.0 Tue Jul 28 -- Deprecate batch function calls in favor of type inference

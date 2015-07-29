@@ -53,8 +53,6 @@ def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
 
 
 def resize_image(image, size, min_axis):
-    if size:
-        image = image.resize(size)
     if min_axis:
         min_idx, other_idx = (0,1) if image.size[0] < image.size[1] else (1,0)
         aspect = image.size[other_idx]/float(image.size[min_idx])
@@ -67,7 +65,8 @@ def resize_image(image, size, min_axis):
         size_arr[min_idx] = min_axis
         size_arr[other_idx] = int(min_axis * aspect)
         image = image.resize(tuple(size_arr))
-
+    elif size:
+        image = image.resize(size)
     return image
 
 

@@ -10,6 +10,7 @@ JSON_HEADERS = {
     'version-number': VERSION
 }
 
+from indicoio.text.twitter_engagement import twitter_engagement
 from indicoio.text.sentiment import political, posneg, sentiment_hq
 from indicoio.text.sentiment import posneg as sentiment
 from indicoio.text.lang import language
@@ -41,7 +42,7 @@ def detect_batch_decorator(f):
             kwargs['batch'] = True
         return f(*args, **kwargs)
     return wrapper
-    
+
 apis = dict((api, globals().get(api)) for api in API_NAMES)
 
 for api in apis:

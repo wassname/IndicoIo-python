@@ -52,7 +52,8 @@ TEXT_APIS = [
     'language',
     'sentiment_hq',
     'keywords',
-    'named_entities'
+    'named_entities',
+    'twitter_engagement'
 ]
 
 IMAGE_APIS = [

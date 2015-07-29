@@ -11,6 +11,7 @@ from indicoio import batch_political, batch_sentiment, batch_fer, batch_content_
 from indicoio import batch_language, batch_image_features, batch_text_tags
 from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
+from indicoio import twitter_engagement, batch_twitter_engagement
 from indicoio import named_entities, batch_named_entities
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
@@ -288,6 +289,22 @@ class FullAPIRun(unittest.TestCase):
         response = sentiment_hq(test_string)
         self.assertTrue(isinstance(response, float))
         self.assertTrue(response > 0.5)
+
+    def test_twitter_engagement(self):
+        test_string = "Worst song ever."
+        response = twitter_engagement(test_string)
+
+        self.assertIsInstance(response, float)
+        self.assertTrue(response <= 1)
+        self.assertTrue(response >= 0)
+
+    def test_batch_twitter_engagement(self):
+        test_string = "Worst song ever."
+        response = batch_twitter_engagement([test_string, test_string])
+
+        self.assertTrue(isinstance(response, list))
+        self.assertIsInstance(response[0], float)
+        self.assertEqual(response[0], response[1])
 
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])

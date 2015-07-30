@@ -87,6 +87,13 @@ class BatchAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
 
+    def test_fer_detect(self):
+        test_data = os.path.normpath(os.path.join(DIR, "data/fear.png"))
+        response = fer(test_data, api_key=self.api_key, detect=True)
+        self.assertIsInstance(response, list)
+        self.assertEqual(len(response), 1)
+        self.assertIn("location", response[0])
+
     def test_batch_fer_pil_image(self):
         test_data = [Image.open(os.path.normpath(os.path.join(DIR, "data/fear.png")))]
         response = fer(test_data, api_key=self.api_key)

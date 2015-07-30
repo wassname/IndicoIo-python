@@ -46,5 +46,5 @@ def detect_batch_decorator(f):
 apis = dict((api, globals().get(api)) for api in API_NAMES)
 
 for api in apis:
-    globals()[api] = partial(detect_batch_decorator(apis[api]))
+    globals()[api] = detect_batch_decorator(apis[api])
     globals()['batch_' + api] = partial(deprecation_decorator(apis[api], api), batch=True)

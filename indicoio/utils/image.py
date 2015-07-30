@@ -41,7 +41,8 @@ def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
     else:
         raise IndicoError("Image must be a filepath, base64 encoded string, or a numpy array")
 
-    out_image = resize_image(out_image, size, min_axis)
+    if size or min_axis:
+        out_image = resize_image(out_image, size, min_axis)
 
     # convert to base64
     temp_output = StringIO.StringIO()
@@ -60,7 +61,7 @@ def resize_image(image, size, min_axis):
             warnings.warn(
                 "An aspect ratio greater than 10:1 is not recommended",
                 Warning
-            )          
+            )
         size_arr = [0,0]
         size_arr[min_idx] = min_axis
         size_arr[other_idx] = int(min_axis * aspect)
@@ -89,4 +90,3 @@ def get_element_type(_list, dimens):
     for _ in xrange(len(dimens)):
         elem = elem[0]
     return type(elem)
-

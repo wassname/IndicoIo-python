@@ -10,7 +10,7 @@ from indicoio.utils.errors import IndicoError, DataStructureException
 
 B64_PATTERN = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)")
 
-def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
+def image_preprocess(image, size=None, min_axis=None, batch=False):
     """
     Takes an image and prepares it for sending to the api including
     resizing and image data/structure standardizing.

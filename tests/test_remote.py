@@ -6,7 +6,7 @@ from requests import ConnectionError
 from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import config
-from indicoio import political, sentiment, fer, facial_features, content_filtering, language, image_features, text_tags
+from indicoio import political, sentiment, fer, facial_features, facial_localization, content_filtering, language, image_features, text_tags
 from indicoio import batch_political, batch_sentiment, batch_fer, batch_content_filtering, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
 from indicoio import keywords, batch_keywords
@@ -354,6 +354,24 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
+
+    def test_facial_localization(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        res = facial_localization(test_face)[0]
+        self.assertTrue(res["top_left_corner"][0] < res["bottom_right_corner"][0])
+        self.assertTrue(res["top_left_corner"][1] < res["bottom_right_corner"][1])
+
+    def test_facial_localization_sensitivity(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        low_sens = facial_localization(test_face, sensitivity=0.1)
+        high_sens = facial_localization(test_face, sensitivity=0.9)
+        self.assertEqual(len(low_sens), 1)
+        self.assertTrue(len(high_sens) > 1)
+
+    def test_facial_localization_crop(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        res = facial_localization(test_face, crop=True)[0]
+        self.assertTrue(res.get("image"))
 
     def test_safe_content_filtering(self):
         test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))

@@ -16,7 +16,7 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
 
        >>> from indicoio import facial_features
        >>> import numpy as np
-       >>> face = np.zeros((48,48)).tolist()
+       >>> face = np.zeros((48,48))
        >>> features = facial_features(face)
        >>> len(features)
        48
@@ -25,7 +25,7 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :type image: list of lists
     :rtype: List containing feature responses
     """
-    image = image_preprocess(image, batch=batch)
+    image = image_preprocess(image, batch=batch, size=(48,48))
     url_params = {"batch": batch, "api_key": api_key}
     return api_handler(image, cloud=cloud, api="facialfeatures", url_params=url_params, **kwargs)
 

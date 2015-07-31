@@ -24,6 +24,6 @@ def content_filtering(image, cloud=None, batch=False, api_key=None, **kwargs):
     :type image: list of lists
     :rtype: float of nsfwness
     """
-    image = image_preprocess(image, batch=batch, size=None, min_axis=128)
+    image = image_preprocess(image, batch=batch, min_axis=128)
     url_params = {"batch": batch, "api_key": api_key}
     return api_handler(image, cloud=cloud, api="contentfiltering", url_params=url_params, **kwargs)

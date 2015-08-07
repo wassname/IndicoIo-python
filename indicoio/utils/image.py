@@ -10,7 +10,7 @@ from indicoio.utils.errors import IndicoError, DataStructureException
 
 B64_PATTERN = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)")
 
-def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
+def image_preprocess(image, size=None, min_axis=None, batch=False):
     """
     Takes an image and prepares it for sending to the api including
     resizing and image data/structure standardizing.
@@ -41,7 +41,8 @@ def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
     else:
         raise IndicoError("Image must be a filepath, base64 encoded string, or a numpy array")
 
-    out_image = resize_image(out_image, size, min_axis)
+    if size or min_axis:
+        out_image = resize_image(out_image, size, min_axis)
 
     # convert to base64
     temp_output = StringIO.StringIO()
@@ -53,8 +54,6 @@ def image_preprocess(image, size=(48,48), min_axis=None, batch=False):
 
 
 def resize_image(image, size, min_axis):
-    if size:
-        image = image.resize(size)
     if min_axis:
         min_idx, other_idx = (0,1) if image.size[0] < image.size[1] else (1,0)
         aspect = image.size[other_idx]/float(image.size[min_idx])
@@ -62,12 +61,13 @@ def resize_image(image, size, min_axis):
             warnings.warn(
                 "An aspect ratio greater than 10:1 is not recommended",
                 Warning
-            )          
+            )
         size_arr = [0,0]
         size_arr[min_idx] = min_axis
         size_arr[other_idx] = int(min_axis * aspect)
         image = image.resize(tuple(size_arr))
-
+    elif size:
+        image = image.resize(size)
     return image
 
 
@@ -90,4 +90,3 @@ def get_element_type(_list, dimens):
     for _ in xrange(len(dimens)):
         elem = elem[0]
     return type(elem)
-

@@ -1,7 +1,7 @@
 from functools import wraps, partial
 import warnings
 
-Version, version, __version__, VERSION = ('0.9.0',) * 4
+Version, version, __version__, VERSION = ('0.9.1',) * 4
 
 JSON_HEADERS = {
     'Content-type': 'application/json',
@@ -10,6 +10,7 @@ JSON_HEADERS = {
     'version-number': VERSION
 }
 
+from indicoio.text.twitter_engagement import twitter_engagement
 from indicoio.text.sentiment import political, posneg, sentiment_hq
 from indicoio.text.sentiment import posneg as sentiment
 from indicoio.text.lang import language
@@ -18,6 +19,7 @@ from indicoio.text.keywords import keywords
 from indicoio.text.ner import named_entities
 from indicoio.images.fer import fer
 from indicoio.images.features import facial_features
+from indicoio.images.faciallocalization import facial_localization
 from indicoio.images.features import image_features
 from indicoio.images.filtering import content_filtering
 from indicoio.utils.multi import predict_image, predict_text
@@ -41,9 +43,9 @@ def detect_batch_decorator(f):
             kwargs['batch'] = True
         return f(*args, **kwargs)
     return wrapper
-    
+
 apis = dict((api, globals().get(api)) for api in API_NAMES)
 
 for api in apis:
-    globals()[api] = partial(detect_batch_decorator(apis[api]))
+    globals()[api] = detect_batch_decorator(apis[api])
     globals()['batch_' + api] = partial(deprecation_decorator(apis[api], api), batch=True)

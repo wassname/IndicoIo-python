@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import unittest
 import os, random
 from PIL import Image
@@ -6,11 +8,12 @@ from requests import ConnectionError
 from nose.plugins.skip import Skip, SkipTest
 
 from indicoio import config
-from indicoio import political, sentiment, fer, facial_features, content_filtering, language, image_features, text_tags
+from indicoio import political, sentiment, fer, facial_features, facial_localization, content_filtering, language, image_features, text_tags
 from indicoio import batch_political, batch_sentiment, batch_fer, batch_content_filtering, batch_facial_features
 from indicoio import batch_language, batch_image_features, batch_text_tags
 from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
+from indicoio import twitter_engagement, batch_twitter_engagement
 from indicoio import named_entities, batch_named_entities
 from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
 from indicoio.utils.errors import IndicoError
@@ -85,6 +88,13 @@ class BatchAPIRun(unittest.TestCase):
         response = fer(test_data, api_key=self.api_key)
         self.assertTrue(isinstance(response, list))
         self.assertTrue(isinstance(response[0], dict))
+
+    def test_fer_detect(self):
+        test_data = os.path.normpath(os.path.join(DIR, "data/fear.png"))
+        response = fer(test_data, api_key=self.api_key, detect=True)
+        self.assertIsInstance(response, list)
+        self.assertEqual(len(response), 1)
+        self.assertIn("location", response[0])
 
     def test_batch_fer_pil_image(self):
         test_data = [Image.open(os.path.normpath(os.path.join(DIR, "data/fear.png")))]
@@ -242,6 +252,38 @@ class FullAPIRun(unittest.TestCase):
         for v in results.values():
             assert v >= .1
 
+    def test_keywords_language(self):
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+        words = set(text.lower().split())
+
+        results = keywords(text, language = 'detect')
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+
+        self.assertTrue(set(results.keys()).issubset(words))
+
+        results = keywords(text, top_n=3)
+        assert len(results) is 3
+
+        results = keywords(text, threshold=.1)
+        for v in results.values():
+            assert v >= .1
+
+    def test_keywords_language(self):
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+        words = set(text.lower().split())
+
+        results = keywords(text, language = 'French')
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+
+        self.assertTrue(set(results.keys()).issubset(words))
+
+        results = keywords(text, top_n=3)
+        assert len(results) is 3
+
+        results = keywords(text, threshold=.1)
+        for v in results.values():
+            assert v >= .1
+
     def test_named_entities(self):
         text = "London Underground's boss Mike Brown warned that the strike ..."
         expected_entities = ("London Underground", "Mike Brown")
@@ -289,6 +331,22 @@ class FullAPIRun(unittest.TestCase):
         self.assertTrue(isinstance(response, float))
         self.assertTrue(response > 0.5)
 
+    def test_twitter_engagement(self):
+        test_string = "Worst song ever."
+        response = twitter_engagement(test_string)
+
+        self.assertIsInstance(response, float)
+        self.assertTrue(response <= 1)
+        self.assertTrue(response >= 0)
+
+    def test_batch_twitter_engagement(self):
+        test_string = "Worst song ever."
+        response = batch_twitter_engagement([test_string, test_string])
+
+        self.assertTrue(isinstance(response, list))
+        self.assertIsInstance(response[0], float)
+        self.assertEqual(response[0], response[1])
+
     def test_good_fer(self):
         fer_set = set(['Angry', 'Sad', 'Neutral', 'Surprise', 'Fear', 'Happy'])
         test_face = os.path.normpath(os.path.join(DIR, "data/48by48.png"))
@@ -330,6 +388,24 @@ class FullAPIRun(unittest.TestCase):
 
         self.assertTrue(isinstance(response, dict))
         self.assertEqual(fer_set, set(response.keys()))
+
+    def test_facial_localization(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        res = facial_localization(test_face)[0]
+        self.assertTrue(res["top_left_corner"][0] < res["bottom_right_corner"][0])
+        self.assertTrue(res["top_left_corner"][1] < res["bottom_right_corner"][1])
+
+    def test_facial_localization_sensitivity(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        low_sens = facial_localization(test_face, sensitivity=0.1)
+        high_sens = facial_localization(test_face, sensitivity=0.9)
+        self.assertEqual(len(low_sens), 1)
+        self.assertTrue(len(high_sens) > 1)
+
+    def test_facial_localization_crop(self):
+        test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))
+        res = facial_localization(test_face, crop=True)[0]
+        self.assertTrue(res.get("image"))
 
     def test_safe_content_filtering(self):
         test_face = os.path.normpath(os.path.join(DIR, "data/happy.png"))

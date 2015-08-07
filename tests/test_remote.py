@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import unittest
 import os, random
 from PIL import Image
@@ -240,6 +242,38 @@ class FullAPIRun(unittest.TestCase):
         results = keywords(text)
         sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
         assert 'api' in sorted_results[:3]
+
+        self.assertTrue(set(results.keys()).issubset(words))
+
+        results = keywords(text, top_n=3)
+        assert len(results) is 3
+
+        results = keywords(text, threshold=.1)
+        for v in results.values():
+            assert v >= .1
+
+    def test_keywords_language(self):
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+        words = set(text.lower().split())
+
+        results = keywords(text, language = 'detect')
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
+
+        self.assertTrue(set(results.keys()).issubset(words))
+
+        results = keywords(text, top_n=3)
+        assert len(results) is 3
+
+        results = keywords(text, threshold=.1)
+        for v in results.values():
+            assert v >= .1
+
+    def test_keywords_language(self):
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+        words = set(text.lower().split())
+
+        results = keywords(text, language = 'French')
+        sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
 
         self.assertTrue(set(results.keys()).issubset(words))
 

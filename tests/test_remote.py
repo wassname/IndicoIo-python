@@ -259,6 +259,7 @@ class FullAPIRun(unittest.TestCase):
         results = keywords(text, language = 'detect')
         sorted_results = sorted(results.keys(), key=lambda x:results.get(x), reverse=True)
 
+        print results, words
         self.assertTrue(set(results.keys()).issubset(words))
 
         results = keywords(text, top_n=3)

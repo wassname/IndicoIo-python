@@ -1,7 +1,7 @@
 from functools import wraps, partial
 import warnings
 
-Version, version, __version__, VERSION = ('0.9.1',) * 4
+Version, version, __version__, VERSION = ('0.9.2',) * 4
 
 JSON_HEADERS = {
     'Content-type': 'application/json',
@@ -22,7 +22,7 @@ from indicoio.images.features import facial_features
 from indicoio.images.faciallocalization import facial_localization
 from indicoio.images.features import image_features
 from indicoio.images.filtering import content_filtering
-from indicoio.utils.multi import predict_image, predict_text
+from indicoio.utils.multi import analyze_image, analyze_text, intersections
 
 from indicoio.config import API_NAMES
 

@@ -63,7 +63,13 @@ IMAGE_APIS = [
     'content_filtering'
 ]
 
-API_NAMES = IMAGE_APIS + TEXT_APIS + ["predict_text", "predict_image"]
+OTHER_APIS = [
+    "analyze_text", 
+    "analyze_image",
+    "intersections"
+]
+
+API_NAMES = IMAGE_APIS + TEXT_APIS + OTHER_APIS
 
 SETTINGS = Settings(files=[
     os.path.expanduser("~/.indicorc"),

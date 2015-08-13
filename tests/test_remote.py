@@ -252,8 +252,8 @@ class FullAPIRun(unittest.TestCase):
         for v in results.values():
             assert v >= .1
 
-    def test_keywords_language(self):
-        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+    def test_keywords_language_detect(self):
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell"
         words = set(text.lower().split())
 
         results = keywords(text, language = 'detect')
@@ -269,7 +269,7 @@ class FullAPIRun(unittest.TestCase):
             assert v >= .1
 
     def test_keywords_language(self):
-        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell."
+        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell"
         words = set(text.lower().split())
 
         results = keywords(text, language = 'French')
@@ -564,7 +564,7 @@ class FullAPIRun(unittest.TestCase):
         config.api_key = temp_api_key
 
 
-class NumpyImagesRun(FullAPIRun):
+class NumpyImagesRun(unittest.TestCase):
     """
     Testing numpy array as images
     """
@@ -575,6 +575,14 @@ class NumpyImagesRun(FullAPIRun):
             globals()["np"] = np
         except ImportError:
             self.skipTest("Numpy is not installed!")
+
+    def check_range(self, _list, minimum=0.9, maximum=0.1, span=0.5):
+        vector = list(flatten(_list))
+        _max = max(vector)
+        _min = min(vector)
+        self.assertTrue(max(vector) > maximum)
+        self.assertTrue(min(vector) < minimum)
+        self.assertTrue(_max - _min > span)
 
     def test_float_numpy_arrays(self):
         test_image = np.random.random(size=(48,48))

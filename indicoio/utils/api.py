@@ -19,7 +19,6 @@ def api_handler(arg, cloud, api, url_params=None, **kwargs):
     cloud = cloud or config.cloud
     host = "%s.indico.domains" % cloud if cloud else config.PUBLIC_API_HOST
     url = create_url(host, api, url_params)
-
     response = requests.post(url, data=json_data, headers=JSON_HEADERS)
 
     if response.status_code == 503 and cloud != None:

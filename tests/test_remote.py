@@ -15,7 +15,7 @@ from indicoio import keywords, batch_keywords
 from indicoio import sentiment_hq, batch_sentiment_hq
 from indicoio import twitter_engagement, batch_twitter_engagement
 from indicoio import named_entities, batch_named_entities
-from indicoio import predict_image, predict_text, batch_predict_image, batch_predict_text
+from indicoio import intersections, analyze_image, analyze_text, batch_analyze_image, batch_analyze_text
 from indicoio.utils.errors import IndicoError
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -158,7 +158,7 @@ class BatchAPIRun(unittest.TestCase):
     def test_batch_multi_api_image(self):
         test_data = [os.path.normpath(os.path.join(DIR, "data/48by48.png")),
                      os.path.normpath(os.path.join(DIR, "data/48by48.png"))]
-        response = predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+        response = analyze_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
@@ -166,32 +166,32 @@ class BatchAPIRun(unittest.TestCase):
 
     def test_batch_multi_api_text(self):
         test_data = ['clearly an english sentence']
-        response = predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+        response = analyze_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
 
     def test_default_multi_api_text(self):
         test_data = ['clearly an english sentence']
-        response = predict_text(test_data, api_key=self.api_key)
+        response = analyze_text(test_data, api_key=self.api_key)
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
 
     def test_multi_api_bad_api(self):
         self.assertRaises(IndicoError,
-                          predict_text,
+                          analyze_text,
                           "this shouldn't work",
                           apis=["sentiment", "somethingbad"])
 
     def test_multi_bad_mixed_api(self):
         self.assertRaises(IndicoError,
-                            predict_text,
+                            analyze_text,
                             "this shouldn't work",
                             apis=["fer", "sentiment", "facial_features"])
     def test_batch_multi_bad_mixed_api(self):
         self.assertRaises(IndicoError,
-                            predict_text,
+                            analyze_text,
                             ["this shouldn't work"],
                             apis=["fer", "sentiment", "facial_features"])
 
@@ -470,18 +470,58 @@ class FullAPIRun(unittest.TestCase):
 
     def test_multi_api_image(self):
         test_data = os.path.normpath(os.path.join(DIR, "data/48by48.png"))
-        response = predict_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
+        response = analyze_image(test_data, apis=config.IMAGE_APIS, api_key=self.api_key)
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.IMAGE_APIS))
 
     def test_multi_api_text(self):
         test_data = 'clearly an english sentence'
-        response = predict_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
+        response = analyze_text(test_data, apis=config.TEXT_APIS, api_key=self.api_key)
 
         self.assertTrue(isinstance(response, dict))
         self.assertTrue(set(response.keys()) == set(config.TEXT_APIS))
 
+    def test_intersections_not_enough_data(self):
+        test_data = ['test_Data']
+        self.assertRaises(
+            IndicoError,
+            intersections,
+            test_data,
+            apis=['text_tags', 'sentiment']
+        )
+
+    def test_intersections_wrong_number_of_apis(self):
+        test_data = ['test data']*3
+        self.assertRaises(
+            IndicoError,
+            intersections,
+            test_data,
+            apis=['text_tags', 'sentiment', 'language']
+        )
+
+    def test_intersections_bad_api_type(self):
+        test_data = ['test data']*3
+        self.assertRaises(
+            IndicoError,
+            intersections,
+            test_data,
+            apis=['text_tags', 'fer']
+        )
+
+    def test_intersections_valid_input(self):
+        test_data = ['test data']*3
+        apis = ['text_tags', 'sentiment']
+        results = intersections(test_data, apis=apis)
+        assert set(results.keys()) < set(apis)
+
+    def test_intersections_valid_raw_input(self):
+        test_data = {
+            'sentiment': [0.1, 0.2, 0.3],
+            'twitter_engagement': [0.1, 0.2, 0.3]
+        }
+        results = intersections(test_data, apis=['sentiment', 'twitter_engagement'])
+        assert set(results.keys()) < set(test_data.keys())
 
     def test_language(self):
         language_set = set([

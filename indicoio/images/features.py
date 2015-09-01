@@ -3,7 +3,7 @@ import requests
 from indicoio.utils.image import image_preprocess
 from indicoio.utils.api import api_handler
 
-def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
+def facial_features(image, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given an grayscale input image of a face, returns a 48 dimensional feature vector explaining that face.
     Useful as a form of feature engineering for face oriented tasks.
@@ -26,10 +26,10 @@ def facial_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing feature responses
     """
     image = image_preprocess(image, batch=batch, size=(48,48))
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(image, cloud=cloud, api="facialfeatures", url_params=url_params, **kwargs)
 
-def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
+def image_features(image, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given an input image, returns a 2048 dimensional sparse feature vector explaining that image.
     Useful as a form of feature engineering for image oriented tasks.
@@ -60,5 +60,5 @@ def image_features(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: List containing features
     """
     image = image_preprocess(image, batch=batch, size=(64,64))
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(image, cloud=cloud, api="imagefeatures", url_params=url_params, **kwargs)

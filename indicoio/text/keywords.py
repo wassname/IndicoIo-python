@@ -1,7 +1,7 @@
 from indicoio.utils.api import api_handler
 import indicoio.config as config
 
-def keywords(text, cloud=None, batch=False, api_key=None, **kwargs):
+def keywords(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns series of keywords and associated scores
 

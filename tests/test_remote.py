@@ -209,13 +209,6 @@ class FullAPIRun(unittest.TestCase):
     def setUp(self):
         self.api_key = config.api_key
 
-    def load_image(self, relpath, as_grey=False):
-        im = Image.open(os.path.normpath(os.path.join(DIR, relpath))).convert('L');
-        pixels = list(im.getdata())
-        width, height = im.size
-        pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
-        return pixels
-
     def check_range(self, _list, minimum=0.9, maximum=0.1, span=0.5):
         vector = list(flatten(_list))
         _max = max(vector)
@@ -253,7 +246,7 @@ class FullAPIRun(unittest.TestCase):
             assert v >= .1
 
     def test_keywords_language_detect(self):
-        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell"
+        text = "il a remporté sa première victoire dans la descente de Val Gardena en Italie"
         words = set(text.lower().split())
 
         results = keywords(text, language = 'detect')
@@ -269,7 +262,7 @@ class FullAPIRun(unittest.TestCase):
             assert v >= .1
 
     def test_keywords_language(self):
-        text = "La semaine suivante, il remporte sa premiere victoire, dans la descente de Val Gardena en Italie, près de cinq ans après la dernière victoire en Coupe du monde d'un Français dans cette discipline, avec le succès de Nicolas Burtin à Kvitfjell"
+        text = "il a remporté sa première victoire dans la descente de Val Gardena en Italie"
         words = set(text.lower().split())
 
         results = keywords(text, language = 'French')

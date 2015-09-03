@@ -18,9 +18,9 @@ from indicoio.text.tagging import text_tags
 from indicoio.text.keywords import keywords
 from indicoio.text.ner import named_entities
 from indicoio.images.fer import fer
-from indicoio.images.features import facial_features
+from indicoio.images.features import facial_features, image_features
 from indicoio.images.faciallocalization import facial_localization
-from indicoio.images.features import image_features
+from indicoio.images.recognition import image_recognition
 from indicoio.images.filtering import content_filtering
 from indicoio.utils.multi import analyze_image, analyze_text, intersections
 

@@ -60,11 +60,12 @@ IMAGE_APIS = [
     'fer',
     'facial_features',
     'image_features',
+    'image_recognition',
     'content_filtering'
 ]
 
 OTHER_APIS = [
-    "analyze_text", 
+    "analyze_text",
     "analyze_image",
     "intersections"
 ]

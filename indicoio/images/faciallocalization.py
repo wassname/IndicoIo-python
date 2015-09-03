@@ -4,7 +4,7 @@ from indicoio.utils.image import image_preprocess
 from indicoio.utils.api import api_handler
 
 
-def facial_localization(image, cloud=None, batch=False, api_key=None, **kwargs):
+def facial_localization(image, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given an image, returns a list of faces found within the image.
     For each face, we return a dictionary containing the upper left corner and lower right corner.
@@ -24,8 +24,8 @@ def facial_localization(image, cloud=None, batch=False, api_key=None, **kwargs):
 
     :param image: The image to be analyzed.
     :type image: filepath or ndarray
-    :rtype: List of faces (dict) found. 
+    :rtype: List of faces (dict) found.
     """
     image = image_preprocess(image, batch=batch)
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(image, cloud=cloud, api="faciallocalization", url_params=url_params, **kwargs)

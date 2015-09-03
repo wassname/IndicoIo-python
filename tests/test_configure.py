@@ -58,11 +58,11 @@ class TestConfigurationFile(unittest.TestCase):
         """
         assert self.settings.cloud() == self.cloud
 
-    def test_set_auth_from_config_file(self):   
+    def test_set_auth_from_config_file(self):
         """
         Ensure cloud authentication credentials are read in from file
         """
-        assert self.settings.api_key() == self.api_key        
+        assert self.settings.api_key() == self.api_key
 
 
 class TestPrecedence(unittest.TestCase):
@@ -74,7 +74,7 @@ class TestPrecedence(unittest.TestCase):
         self.file_api_key = "file-api-key"
         self.file_cloud = "file-cloud"
 
-        self.env_api_key = "env-api-key"  
+        self.env_api_key = "env-api-key"
         self.env_cloud = "env-cloud"
         config = """
         [auth]
@@ -97,12 +97,12 @@ class TestPrecedence(unittest.TestCase):
         """
         assert self.settings.cloud() == self.env_cloud
 
-    def test_set_auth_from_config_file(self):   
+    def test_set_auth_from_config_file(self):
         """
-        Ensure cloud authentication credentials set in environment variables 
+        Ensure cloud authentication credentials set in environment variables
         are used over those in config files
         """
-        assert self.settings.api_key() == self.env_api_key       
+        assert self.settings.api_key() == self.env_api_key
 
 
 class TestConfigFilePrecedence(unittest.TestCase):
@@ -154,7 +154,7 @@ class TestConfigFilePrecedence(unittest.TestCase):
         """
         assert self.settings.cloud() == self.high_priority_cloud
 
-    def test_auth_config_file_priority(self):   
+    def test_auth_config_file_priority(self):
         """
         Ensure the cloud auth priority is handled properly
         """

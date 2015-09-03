@@ -1,7 +1,7 @@
 from indicoio.utils.api import api_handler
 import indicoio.config as config
 
-def twitter_engagement(text, cloud=None, batch=False, api_key=None, **kwargs):
+def twitter_engagement(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns an engagment score between 0 and 1
 
@@ -18,5 +18,5 @@ def twitter_engagement(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Float of engagement between 0 and 1
     """
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(text, cloud=cloud, api="twitterengagement", url_params=url_params, **kwargs)

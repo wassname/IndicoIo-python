@@ -4,7 +4,7 @@ from indicoio.utils.api import api_handler
 from indicoio.utils.image import image_preprocess
 import indicoio.config as config
 
-def fer(image, cloud=None, batch=False, api_key=None, **kwargs):
+def fer(image, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given a grayscale input image of a face, returns a probability distribution over emotional state.
     Input should be in a list of list format, resizing will be attempted internally but for best
@@ -31,6 +31,6 @@ def fer(image, cloud=None, batch=False, api_key=None, **kwargs):
     image = image_preprocess(image, batch=batch,
         size=None if kwargs.get("detect") else (48, 48)
     )
-    
-    url_params = {"batch": batch, "api_key": api_key}
+
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(image, cloud=cloud, api="fer", url_params=url_params, **kwargs)

@@ -1,6 +1,6 @@
 from indicoio.utils.api import api_handler
 
-def political(text, cloud=None, batch=False, api_key=None, **kwargs):
+def political(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns a probability distribution over the political alignment of the speaker.
 
@@ -25,10 +25,10 @@ def political(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Dictionary of party probability pairs
     """
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(text, cloud=cloud, api="political", url_params=url_params, **kwargs)
 
-def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
+def posneg(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns a scalar estimate of the sentiment of that text.
     Values are roughly in the range 0 to 1 with 0.5 indicating neutral sentiment.
@@ -48,10 +48,10 @@ def posneg(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Float
     """
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(text, cloud=cloud, api="sentiment", url_params=url_params, **kwargs)
 
-def sentiment_hq(text, cloud=None, batch=False, api_key=None, **kwargs):
+def sentiment_hq(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns a scalar estimate of the sentiment of that text.
     Values are roughly in the range 0 to 1 with 0.5 indicating neutral sentiment.
@@ -71,5 +71,5 @@ def sentiment_hq(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Float
     """
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(text, cloud=cloud, api="sentimenthq", url_params=url_params, **kwargs)

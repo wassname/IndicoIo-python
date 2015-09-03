@@ -1,7 +1,7 @@
 from indicoio.utils.api import api_handler
 import indicoio.config as config
 
-def named_entities(text, cloud=None, batch=False, api_key=None, **kwargs):
+def named_entities(text, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given input text, returns named entities (proper nouns) found in the text
 
@@ -26,5 +26,5 @@ def named_entities(text, cloud=None, batch=False, api_key=None, **kwargs):
     :type text: str or unicode
     :rtype: Dictionary of language probability pairs
     """
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(text, cloud=cloud, api="namedentities", url_params=url_params, **kwargs)

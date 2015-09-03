@@ -4,7 +4,7 @@ from indicoio.utils.api import api_handler
 from indicoio.utils.image import image_preprocess
 import indicoio.config as config
 
-def content_filtering(image, cloud=None, batch=False, api_key=None, **kwargs):
+def content_filtering(image, cloud=None, batch=False, api_key=None, version=None, **kwargs):
     """
     Given a grayscale input image, returns how obcene the image is.
     Input should be in a list of list format.
@@ -25,5 +25,5 @@ def content_filtering(image, cloud=None, batch=False, api_key=None, **kwargs):
     :rtype: float of nsfwness
     """
     image = image_preprocess(image, batch=batch, min_axis=128)
-    url_params = {"batch": batch, "api_key": api_key}
+    url_params = {"batch": batch, "api_key": api_key, "version": version}
     return api_handler(image, cloud=cloud, api="contentfiltering", url_params=url_params, **kwargs)
